@@ -20,7 +20,7 @@
 > - 核心模块的详细执行流程图
 > - 结构化学习框架与面试指南
 > - 精简版 agent 循环
-> -记忆模块的优化与调试
+> - 记忆模块的优化与调试
 <p align="center">
   <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white">
   <img alt="Tests" src="https://img.shields.io/badge/tests-1000%2B%20passed-brightgreen?style=flat-square">
