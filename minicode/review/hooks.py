@@ -594,12 +594,20 @@ def _pre_review_content(content: str, file_path: str = "") -> list[dict]:
     findings = []
     lines = content.splitlines()
 
+    # False-positive prefix check on file path (skip seed/test/fixture files)
+    fp_file = any(file_path.startswith(p) or f"/{p}" in file_path for p in _FP_PREFIXES)
+
     for i, line in enumerate(lines, 1):
         stripped = line.strip()
-        if not stripped or stripped.startswith("#") or stripped.startswith(('"', "'")):
+        if not stripped:
             continue
-        if any(stripped.startswith(p) for p in _FP_PREFIXES):
+        if fp_file:
             continue
+        # Skip literal string-only lines (docstrings, etc.) but not comments with TODO
+        if stripped.startswith(('#', '"', "'")):
+            # Only skip pure string literals; comments with TODO/FIXME still need checking
+            if stripped.startswith('"') or stripped.startswith("'"):
+                continue
 
         for pattern, rule_id, message in _CRITICAL_PATTERNS:
             if _is_false_positive(file_path, rule_id, i):

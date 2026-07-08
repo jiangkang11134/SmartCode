@@ -9,8 +9,8 @@
 
 from __future__ import annotations
 
-import fnmatch
 import time
+from pathlib import PurePosixPath
 from typing import Any
 
 # 安全文件路径 — 匹配即触发严格
