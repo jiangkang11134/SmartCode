@@ -45,7 +45,7 @@ def _match_strict_path(file_path: str) -> bool:
             return True
     # 检查文件名是否以敏感前缀开头
     name = p.name.lower()
-    for prefix in ("login", "encrypt", "crypto", "token", "session", "oauth"):
+    for prefix in ("login", "encrypt", "crypto", "token", "session", "oauth", "dockerfile", "docker-compose"):
         if name.startswith(prefix):
             return True
     return False
