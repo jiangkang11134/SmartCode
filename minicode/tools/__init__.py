@@ -25,6 +25,7 @@ from minicode.tools.load_skill import create_load_skill_tool
 from minicode.tools.patch_file import patch_file_tool
 from minicode.tools.read_file import read_file_tool
 from minicode.tools.run_command import run_command_tool
+from minicode.tools.sandbox_test import sandbox_test_tool
 from minicode.tools.test_runner import test_runner_tool
 from minicode.tools.todo_write import todo_write_tool
 from minicode.tools.web_fetch import web_fetch_tool
@@ -68,6 +69,7 @@ _CORE_TOOLS = [
     file_tree_tool,
     diff_viewer_tool,
     # Testing
+    sandbox_test_tool,
     test_runner_tool,
 ]
 
@@ -81,7 +83,8 @@ def _resolve_tool_profile(runtime: dict | None) -> str:
 
     返回:
         小写化并去除首尾空格的工具集配置档名称
-    """  # configured = (
+    """
+    configured = (
         os.environ.get("MINI_CODE_TOOL_PROFILE")
         or (runtime or {}).get("toolProfile")
         or "core"
@@ -97,7 +100,8 @@ def _is_full_tool_profile(profile: str) -> bool:
 
     返回:
         如果 profile 在 {"full", "utility", "utilities", "all"} 中返回 True
-    """  # return profile in {"full", "utility", "utilities", "all"}
+    """
+    return profile in {"full", "utility", "utilities", "all"}
 
 
 def _load_utility_wrapper_tools():

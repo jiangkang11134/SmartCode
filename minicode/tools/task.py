@@ -11,9 +11,10 @@
 """
 from __future__ import annotations
 
+import os
 import time
 
-from minicode.agent_loop_lite import run_agent_turn
+from minicode.agent_loop import run_agent_turn
 from minicode.tooling import ToolDefinition, ToolResult
 
 
@@ -59,6 +60,38 @@ AGENT_TYPES = {
         ),
         "allowed_tools": None,  # None = all tools allowed
         "max_turns": 15,
+    },
+    "review": {
+        "name": "Review",
+        "description": "Code reviewer — cross-file impact analysis and code quality, does NOT run tests",
+        "system_prompt": (
+            "You are a code reviewer. Your job is to analyze code changes and find issues."
+            "\n\nProcess:"
+            "\n1. Read the import map at .mini-code-import-map/import-map.json"
+            "\n2. Find which files reference the changed symbols"
+            "\n3. Read affected files and check backward compatibility"
+            "\n4. Run code_review on the changed file"
+            "\n5. Output a structured report with severity levels"
+            "\n\nAt the end of your report, output one of these on a new line:"
+            "\n  [REVIEW_RESULT: PASS] — if you found NO issues that need fixing"
+            "\n  [REVIEW_RESULT: FAIL] — if you found any issues that need fixing"
+            "\n\nYou can ONLY READ files. Do NOT modify anything."
+            "\nDo NOT run tests — that is handled by a separate agent."
+            "\nWork autonomously. Do NOT ask the user questions."
+        ),
+        "allowed_tools": {"read_file", "grep_files", "file_tree",
+                           "find_symbols", "find_references",
+                           "diff_viewer", "code_review"},
+        "max_turns": 5,
+    },
+    "test": {
+        "name": "Test",
+        "description": "Test agent — runs tests in Docker sandbox (auto-triggered, no manual use needed)",
+        "system_prompt": (
+            "You are a test agent. Call sandbox_test to run tests."
+        ),
+        "allowed_tools": {"sandbox_test", "read_file"},
+        "max_turns": 3,
     },
 }
 
@@ -122,6 +155,20 @@ def _run(input_data: dict, context) -> ToolResult:
     agent_type = input_data["agent_type"]
     agent_def = AGENT_TYPES[agent_type]
     task_prompt = input_data["prompt"]
+
+    # ── 子 Agent 独立 API 配置 ──
+    # 如果 task_input 带了 sub_api_key/sub_api_base，临时覆写环境变量
+    # 让子 Agent 用不同的 provider（如审查用 DeepSeek，主 Agent 用中转站）
+    _restore_env = {}
+    if "sub_api_key" in input_data:
+        _restore_env["CUSTOM_API_KEY"] = os.environ.get("CUSTOM_API_KEY", "")
+        os.environ["CUSTOM_API_KEY"] = input_data["sub_api_key"]
+    if "sub_api_base" in input_data:
+        _restore_env["CUSTOM_API_BASE_URL"] = os.environ.get("CUSTOM_API_BASE_URL", "")
+        os.environ["CUSTOM_API_BASE_URL"] = input_data["sub_api_base"]
+    if "model" in input_data:
+        _restore_env["ANTHROPIC_MODEL"] = os.environ.get("ANTHROPIC_MODEL", "")
+        os.environ["ANTHROPIC_MODEL"] = input_data["model"]
 
     # Try to get the model from context or fall back to creating one
     # The context object carries runtime info needed for the model adapter
@@ -193,19 +240,24 @@ def _run(input_data: dict, context) -> ToolResult:
     max_turns = agent_def["max_turns"]
 
     try:
-        result_messages = run_agent_turn(
-            model=model,
-            tools=tools,
-            messages=sub_messages,
-            cwd=context.cwd,
-            permissions=sub_permissions,
-            max_steps=max_turns,
-        )
-    except Exception as e:
-        return ToolResult(
-            ok=False,
-            output=f"Sub-agent ({agent_def['name']}) failed: {type(e).__name__}: {e}"
-        )
+        try:
+            result_messages = run_agent_turn(
+                model=model,
+                tools=tools,
+                messages=sub_messages,
+                cwd=context.cwd,
+                permissions=sub_permissions,
+                max_steps=max_turns,
+            )
+        except Exception as e:
+            return ToolResult(
+                ok=False,
+                output=f"Sub-agent ({agent_def['name']}) failed: {type(e).__name__}: {e}"
+            )
+    finally:
+        # 恢复子 Agent 覆写的环境变量
+        for k, v in _restore_env.items():
+            os.environ[k] = v
 
     elapsed = time.time() - start_time
 
@@ -262,8 +314,8 @@ task_tool = ToolDefinition(
             },
             "agent_type": {
                 "type": "string",
-                "enum": ["explore", "plan", "general"],
-                "description": "Type of sub-agent: 'explore' (fast, read-only), 'plan' (thorough, read-only), 'general' (full tools, default)",
+                "enum": ["explore", "plan", "general", "review", "test"],
+                "description": "Type of sub-agent: 'explore' (fast, read-only), 'plan' (thorough, read-only), 'general' (full tools, default), 'review' (code analysis, read-only), 'test' (sandboxed test execution)",
             },
         },
         "required": ["description"],

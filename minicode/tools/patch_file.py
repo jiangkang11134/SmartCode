@@ -25,7 +25,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 当 path 缺失、replacements 为空或格式不正确时。
-    """  # path = input_data.get("path")
+    """
+    path = input_data.get("path")
     replacements = input_data.get("replacements")
     patch = input_data.get("patch")
     if not isinstance(path, str) or not path:
@@ -69,7 +70,8 @@ def _run(input_data: dict, context):
     返回:
         ToolResult 对象。成功时 output 包含替换摘要信息；
         失败时 ok 为 False，output 包含错误描述。
-    """  # target = resolve_tool_path(context, input_data["path"], "write")
+    """
+    target = resolve_tool_path(context, input_data["path"], "write")
     content = load_existing_file(target)
     applied: list[str] = []
     for index, replacement in enumerate(input_data["replacements"], start=1):

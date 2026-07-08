@@ -29,7 +29,8 @@ def _get_cached_file_content(target: Path) -> str:
 
     返回:
         文件内容的字符串，如果读取失败则返回空字符串。
-    """  # try:
+    """
+    try:
         stat = target.stat()
         mtime = stat.st_mtime
         cache_key = (str(target), mtime)
@@ -66,7 +67,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 path 为空或类型错误、offset 为负数、limit 超出范围。
-    """  # path = input_data.get("path")
+    """
+    path = input_data.get("path")
     if not isinstance(path, str) or not path:
         raise ValueError("path is required")
     offset = int(input_data.get("offset", 0))
@@ -90,7 +92,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         ToolResult，包含文件路径、偏移量、结束位置、总字符数等信息以及文件内容片段。
-    """  # target = resolve_tool_path(context, input_data["path"], "read")
+    """
+    target = resolve_tool_path(context, input_data["path"], "read")
 
     try:
         # 使用缓存读取

@@ -34,7 +34,8 @@ def _push_transcript_entry(state: ScreenState, **kwargs: Any) -> int:
 
     返回:
         int: 新条目的 ID
-    """  # entry_id = state.next_entry_id
+    """
+    entry_id = state.next_entry_id
     state.next_entry_id += 1
     state.transcript.append(TranscriptEntry(id=entry_id, **kwargs))
     _bump_transcript_revision(state)
@@ -53,7 +54,8 @@ def _update_transcript_entry(state: ScreenState, entry_id: int, **kwargs: Any) -
 
     返回:
         bool: 是否有字段发生了实际变更
-    """  # for entry in state.transcript:
+    """
+    for entry in state.transcript:
         if entry.id == entry_id:
             changed = False
             for key, value in kwargs.items():
@@ -83,7 +85,8 @@ def _find_transcript_entry(
 
     返回:
         TranscriptEntry | None: 找到的条目，未找到返回 None
-    """  # entries = reversed(state.transcript) if prefer_tail else state.transcript
+    """
+    entries = reversed(state.transcript) if prefer_tail else state.transcript
     for entry in entries:
         if entry.id == entry_id:
             return entry
@@ -102,7 +105,8 @@ def _append_to_transcript_entry(state: ScreenState, entry_id: int, extra_body: s
 
     返回:
         bool: 是否成功追加
-    """  # if not extra_body:
+    """
+    if not extra_body:
         return False
     entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
     if entry is None:
@@ -121,7 +125,8 @@ def _mark_running_tools_as_error(state: ScreenState, message: str) -> None:
     参数:
         state: 屏幕状态对象
         message: 错误信息文本
-    """  # changed = False
+    """
+    changed = False
     for entry in state.transcript:
         if entry.kind == "tool" and entry.status == "running":
             entry.status = "error"
@@ -150,7 +155,8 @@ def _update_tool_entry(state: ScreenState, entry_id: int, status: str, body: str
 
     返回:
         bool: 是否有字段发生了实际变更
-    """  # entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
+    """
+    entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
     if entry is None or entry.kind != "tool":
         return False
 
@@ -183,7 +189,8 @@ def _set_tool_entry_collapse_phase(state: ScreenState, entry_id: int, phase: int
 
     返回:
         bool: 是否发生了变更
-    """  # entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
+    """
+    entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
     if entry is None or entry.kind != "tool" or entry.status == "running":
         return False
     if entry.collapsePhase == phase:
@@ -205,7 +212,8 @@ def _collapse_tool_entry(state: ScreenState, entry_id: int, summary: str) -> boo
 
     返回:
         bool: 是否发生了变更
-    """  # entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
+    """
+    entry = _find_transcript_entry(state, entry_id, prefer_tail=True)
     if entry is None or entry.kind != "tool" or entry.status == "running":
         return False
 
@@ -232,7 +240,8 @@ def _get_running_tool_entries(state: ScreenState) -> list[TranscriptEntry]:
 
     返回:
         list[TranscriptEntry]: 状态为 "running" 的工具条目列表
-    """  # return [e for e in state.transcript if e.kind == "tool" and e.status == "running"]
+    """
+    return [e for e in state.transcript if e.kind == "tool" and e.status == "running"]
 
 
 def _finalize_dangling_running_tools(state: ScreenState) -> None:
@@ -242,7 +251,8 @@ def _finalize_dangling_running_tools(state: ScreenState) -> None:
 
     参数:
         state: 屏幕状态对象
-    """  # running = _get_running_tool_entries(state)
+    """
+    running = _get_running_tool_entries(state)
     if running:
         error_message = (
             f"{running[0].body}\n\n"
@@ -270,7 +280,8 @@ def _schedule_tool_auto_collapse(
         entry_id: 工具条目 ID
         output: 工具输出的原始文本，用于生成摘要
         rerender: 重渲染回调函数
-    """  # summary = _summarize_collapsed_tool_body(output)
+    """
+    summary = _summarize_collapsed_tool_body(output)
 
     def _do_collapse() -> None:
         time.sleep(0.25)

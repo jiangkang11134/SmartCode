@@ -1,0 +1,88 @@
+[
+  {
+    "id": "E001",
+    "type": "one-shot",
+    "description": "写一个 Python 函数，计算斐波那契数列的第 n 项",
+    "expected_features": ["fibonacci", "递归或循环"],
+    "difficulty": "简单"
+  },
+  {
+    "id": "E002",
+    "type": "one-shot",
+    "description": "写一个 Python 函数，判断一个字符串是否是回文",
+    "expected_features": ["回文", "palindrome", "字符串反转"],
+    "difficulty": "简单"
+  },
+  {
+    "id": "E003",
+    "type": "one-shot",
+    "description": "写一个 Flask 应用，包含一个 GET 接口 /hello，返回 JSON 格式的问候语",
+    "expected_features": ["Flask", "GET", "JSON", "/hello"],
+    "difficulty": "中等"
+  },
+  {
+    "id": "E004",
+    "type": "multi-turn",
+    "description": "写一个 Python 类 UserManager，包含添加用户、删除用户、查找用户的方法",
+    "expected_features": ["class", "UserManager", "add", "delete", "find"],
+    "turns": [
+      "先写一个 UserManager 类，用字典存储用户",
+      "给 UserManager 添加一个方法，能把所有用户信息保存到 JSON 文件",
+      "再加一个从 JSON 文件加载用户的方法"
+    ],
+    "difficulty": "中等"
+  },
+  {
+    "id": "E005",
+    "type": "one-shot",
+    "description": "用 Python 写一个装饰器，统计函数执行时间并打印",
+    "expected_features": ["装饰器", "decorator", "time", "执行时间"],
+    "difficulty": "中等"
+  },
+  {
+    "id": "E006",
+    "type": "one-shot",
+    "description": "写一个 Python 函数，读取一个 CSV 文件，返回每列的平均值（假设列都是数值）",
+    "expected_features": ["CSV", "csv", "平均值", "列"],
+    "difficulty": "中等"
+  },
+  {
+    "id": "E007",
+    "type": "multi-turn",
+    "description": "实现一个简单的待办事项 API",
+    "expected_features": ["Flask", "API", "待办", "todo"],
+    "turns": [
+      "用 Flask 写一个 Todo API，支持 GET /todos 获取列表",
+      "添加 POST /todos 创建新待办事项的功能",
+      "添加 DELETE /todos/<id> 删除待办事项的功能",
+      "给每个 todo 加上 completed 字段，支持 PUT /todos/<id> 更新完成状态"
+    ],
+    "difficulty": "复杂"
+  },
+  {
+    "id": "E008",
+    "type": "one-shot",
+    "description": "用 Python 写一个函数，把驼峰命名字符串转为下划线命名（例如：helloWorld -> hello_world）",
+    "expected_features": ["驼峰", "下划线", "camel", "snake"],
+    "difficulty": "简单"
+  },
+  {
+    "id": "E009",
+    "type": "one-shot",
+    "description": "写一个 Python 脚本，监控当前目录下的文件变化，有新文件创建时打印文件名",
+    "expected_features": ["文件监控", "watchdog", "文件变化", "新文件"],
+    "difficulty": "中等"
+  },
+  {
+    "id": "E010",
+    "type": "multi-turn",
+    "description": "实现一个简单的计算器命令行工具",
+    "expected_features": ["计算器", "CLI", "命令行"],
+    "turns": [
+      "写一个命令行计算器，支持加减乘除四个操作，从命令行参数读取两个数字和运算符",
+      "增加乘方和取模运算",
+      "增加交互式模式：用户输入表达式，程序计算结果并输出，输入 exit 退出"
+    ],
+    "difficulty": "复杂"
+  }
+]

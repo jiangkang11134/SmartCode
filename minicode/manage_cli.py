@@ -13,7 +13,7 @@ from minicode.skills import discover_skills, install_skill, remove_managed_skill
 
 def _print_usage() -> None:
     """打印管理命令的使用说明到标准输出。"""
-    # print(
+    print(
         "minicode management commands\n\n"
         "minicode mcp list [--project]\n"
         "minicode mcp add <name> [--project] [--protocol <auto|content-length|newline-json>] [--env KEY=VALUE ...] -- <command> [args...]\n"
@@ -55,7 +55,7 @@ def _take_option(args: list[str], name: str) -> str | None:
     抛出:
         RuntimeError: 选项存在但缺少对应的值
     """
-    # if name not in args:
+    if name not in args:
         return None
     index = args.index(name)
     if index + 1 >= len(args):
@@ -121,7 +121,7 @@ def _handle_mcp_command(cwd: str, args: list[str]) -> bool:
     返回:
         始终返回 True，表示命令已处理
     """
-    # if not args:
+    if not args:
         _print_usage()
         return True
     subcommand, *rest_args = args
@@ -186,7 +186,7 @@ def _handle_skills_command(cwd: str, args: list[str]) -> bool:
     返回:
         始终返回 True，表示命令已处理
     """
-    # if not args:
+    if not args:
         _print_usage()
         return True
     subcommand, *rest_args = args
@@ -232,7 +232,7 @@ def maybe_handle_management_command(cwd: str, argv: list[str]) -> bool:
     返回:
         如果命令被识别并处理则返回 True，否则返回 False
     """
-    # if not argv:
+    if not argv:
         return False
     category, *rest = argv
     if category == "mcp":

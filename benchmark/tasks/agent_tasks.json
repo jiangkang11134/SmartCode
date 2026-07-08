@@ -1,0 +1,106 @@
+[
+  {
+    "id": "AG/1",
+    "difficulty": "中等",
+    "category": "multi-turn",
+    "description": "写一个 Python 函数读取 CSV 文件",
+    "turns": [
+      "写一个函数 read_csv(filename)，读取 CSV 文件返回列表的列表，每行一个子列表",
+      "加一个参数 has_header=True，如果为真则第一行作为列名，返回列表的字典而不是列表的列表",
+      "加一个参数 columns=None，如果指定了列名列表，只返回这些列的数据"
+    ],
+    "expected_features": ["CSV", "csv", "参数", "headre"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/2",
+    "difficulty": "复杂",
+    "category": "multi-turn",
+    "description": "实现一个带缓存的天气查询 API",
+    "turns": [
+      "用 Flask 写一个天气查询 API，GET /weather?city=xxx 返回 JSON，先返回模拟数据",
+      "给 API 加上缓存：用字典缓存查询结果，缓存 60 秒过期",
+      "把缓存改成文件缓存：缓存保存到 weather_cache.json，启动时加载"
+    ],
+    "expected_features": ["Flask", "缓存", "cache", "JSON", "API"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/3",
+    "difficulty": "复杂",
+    "category": "cross-file",
+    "description": "重构一个工具函数到独立模块",
+    "turns": [
+      "在当前目录创建一个 utils.py，包含一个函数 format_date(dt) 把 datetime 转成 YYYY-MM-DD 格式字符串",
+      "创建一个 logger.py，导入 utils.py 的 format_date，用它在日志前面加时间戳",
+      "创建一个 app.py，导入 logger.py，写一个示例函数运行并记录日志"
+    ],
+    "expected_features": ["模块", "import", "跨文件", "重构"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/4",
+    "difficulty": "中等",
+    "category": "cross-file",
+    "description": "定义数据模型并在多个文件中使用",
+    "turns": [
+      "创建 models.py，定义一个 User 类，有 name、email、age 三个属性，用 dataclass",
+      "创建 storage.py，导入 User，实现 save_user(user) 和 load_user(email) 两个函数，用 JSON 文件存储",
+      "创建 main.py，导入 storage，写一个示例程序创建几个用户并保存再加载"
+    ],
+    "expected_features": ["dataclass", "跨文件", "JSON", "序列化"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/5",
+    "difficulty": "简单",
+    "category": "multi-turn",
+    "description": "实现一个计算器",
+    "turns": [
+      "写一个函数 calculator(a, op, b)，支持 + - * / 四种运算",
+      "增加 // 整除和 % 取模运算",
+      "加一个交互模式：用户输入 '3 + 4' 这种表达式，程序自动解析并计算结果"
+    ],
+    "expected_features": ["计算器", "解析", "表达式"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/6",
+    "difficulty": "中等",
+    "category": "multi-turn",
+    "description": "实现一个任务队列",
+    "turns": [
+      "写一个 TaskQueue 类，有 add_task(task_id) 和 get_next() 方法，先进先出",
+      "给 TaskQueue 增加优先级支持：add_task(task_id, priority)，优先级高的先出",
+      "增加任务状态查询：get_status(task_id) 返回 pending/running/completed"
+    ],
+    "expected_features": ["队列", "queue", "优先级", "状态"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/7",
+    "difficulty": "复杂",
+    "category": "cross-file",
+    "description": "实现一个简单的插件系统",
+    "turns": [
+      "创建 plugin_base.py，定义一个 Plugin 基类，有 name 属性和 run(data) 抽象方法",
+      "创建 plugin_upper.py，实现 Plugin，把字符串转大写。创建 plugin_reverse.py，实现 Plugin，反转字符串",
+      "创建 plugin_manager.py，自动发现和加载 plugins 目录下的所有插件，运行并输出结果"
+    ],
+    "expected_features": ["插件", "抽象类", "自动发现", "多文件"],
+    "test_code": ""
+  },
+  {
+    "id": "AG/8",
+    "difficulty": "中等",
+    "category": "cross-file",
+    "description": "重构：将配置分离到独立文件",
+    "turns": [
+      "写一个 main.py，硬编码了一些配置（数据库地址、端口、调试模式），直接打印这些配置",
+      "把配置提取到独立的 config.py，main.py 从 config.py 导入配置",
+      "支持通过环境变量覆盖 config.py 中的配置"
+    ],
+    "expected_features": ["重构", "配置分离", "环境变量"],
+    "test_code": ""
+  }
+]

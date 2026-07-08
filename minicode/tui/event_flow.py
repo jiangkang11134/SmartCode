@@ -45,7 +45,8 @@ def _handle_event(
         approval_event: 审批完成通知事件
         approval_result: 审批结果字典
         handle_input_fn: 提交输入后的处理回调
-    """  # if isinstance(event, TextEvent) and event.ctrl and event.text == "c":
+    """
+    if isinstance(event, TextEvent) and event.ctrl and event.text == "c":
         raise SystemExit(0)
 
     pending = state.pending_approval
@@ -76,7 +77,8 @@ def _handle_pending_approval_event(
         rerender: 触发重新渲染的回调
         approval_event: 审批完成通知事件
         approval_result: 审批结果字典
-    """  # if pending.feedback_mode:
+    """
+    if pending.feedback_mode:
         _handle_feedback_mode_event(state, event, rerender, approval_event, approval_result)
         return
 
@@ -118,7 +120,8 @@ def _handle_pending_approval_key(
 
     返回:
         事件是否已处理
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
 
     if event.name == "escape":
         approval_result.clear()
@@ -178,7 +181,8 @@ def _handle_pending_approval_text(
 
     返回:
         事件是否已处理
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
 
     if event.text == "v" and _toggle_pending_approval_expand(state):
         rerender()
@@ -209,7 +213,8 @@ def _handle_pending_approval_wheel(
 
     返回:
         事件是否已处理
-    """  # delta = 3 if event.direction == "up" else -3
+    """
+    delta = 3 if event.direction == "up" else -3
     if _scroll_pending_approval_by(state, delta):
         rerender()
         return True
@@ -232,7 +237,8 @@ def _confirm_pending_choice(
         rerender: 触发重新渲染的回调
         approval_event: 审批完成通知事件
         approval_result: 审批结果字典
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     choices = pending.request.get("choices", [])
 
     if choices and 0 <= pending.selected_choice_index < len(choices):
@@ -264,7 +270,8 @@ def _select_pending_choice(
         rerender: 触发重新渲染的回调
         approval_event: 审批完成通知事件
         approval_result: 审批结果字典
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     decision = choice.get("decision", "allow_once")
 
     if decision == "deny_with_feedback":
@@ -297,7 +304,8 @@ def _handle_normal_mode_event(
         event: 已解析的输入事件
         rerender: 触发重新渲染的回调
         handle_input_fn: 提交输入后的处理回调
-    """  # visible_commands = _get_visible_commands(state.input)
+    """
+    visible_commands = _get_visible_commands(state.input)
 
     if isinstance(event, KeyEvent):
         if _handle_normal_mode_key(args, state, event, visible_commands, rerender, handle_input_fn):
@@ -342,7 +350,8 @@ def _handle_normal_mode_key(
 
     返回:
         事件是否已处理
-    """  # if event.name == "return":
+    """
+    if event.name == "return":
         _handle_normal_mode_return(args, state, visible_commands, rerender, handle_input_fn)
         return True
 
@@ -408,7 +417,8 @@ def _handle_normal_mode_return(
         visible_commands: 当前可见的斜杠命令列表
         rerender: 触发重新渲染的回调
         handle_input_fn: 提交输入后的处理回调
-    """  # if visible_commands and 0 <= state.selected_slash_index < len(visible_commands):
+    """
+    if visible_commands and 0 <= state.selected_slash_index < len(visible_commands):
         selected = visible_commands[state.selected_slash_index]
         usage = getattr(selected, "usage", str(selected))
         state.input = usage
@@ -442,7 +452,8 @@ def _handle_normal_mode_tab(
         state: 当前屏幕状态
         visible_commands: 当前可见的斜杠命令列表
         rerender: 触发重新渲染的回调
-    """  # selected = visible_commands[min(state.selected_slash_index, len(visible_commands) - 1)]
+    """
+    selected = visible_commands[min(state.selected_slash_index, len(visible_commands) - 1)]
     usage = getattr(selected, "usage", str(selected))
     state.input = usage + " "
     state.cursor_offset = len(state.input)
@@ -473,7 +484,8 @@ def _handle_normal_mode_navigation(
 
     返回:
         事件是否已处理
-    """  # if event.name == "backspace" and state.cursor_offset > 0:
+    """
+    if event.name == "backspace" and state.cursor_offset > 0:
         state.input = state.input[: state.cursor_offset - 1] + state.input[state.cursor_offset :]
         state.cursor_offset -= 1
         state.selected_slash_index = 0
@@ -555,7 +567,8 @@ def _handle_up_arrow(
         state: 当前屏幕状态
         visible_commands: 当前可见的斜杠命令列表
         rerender: 触发重新渲染的回调
-    """  # if visible_commands:
+    """
+    if visible_commands:
         state.selected_slash_index = (state.selected_slash_index - 1 + len(visible_commands)) % len(visible_commands)
         rerender()
     elif _history_up(state):
@@ -575,7 +588,8 @@ def _handle_down_arrow(
         state: 当前屏幕状态
         visible_commands: 当前可见的斜杠命令列表
         rerender: 触发重新渲染的回调
-    """  # if visible_commands:
+    """
+    if visible_commands:
         state.selected_slash_index = (state.selected_slash_index + 1) % len(visible_commands)
         rerender()
     elif _history_down(state):
@@ -609,7 +623,8 @@ def _handle_normal_mode_text(
 
     返回:
         事件是否已处理
-    """  # if event.ctrl:
+    """
+    if event.ctrl:
         if event.text == "u":
             state.input = ""
             state.cursor_offset = 0
@@ -676,7 +691,8 @@ def _handle_normal_mode_wheel(
 
     返回:
         事件是否已处理
-    """  # delta = 3 if event.direction == "up" else -3
+    """
+    delta = 3 if event.direction == "up" else -3
     if _scroll_transcript_by(args, state, delta):
         rerender()
         return True
@@ -703,7 +719,8 @@ def _handle_feedback_mode_event(
         rerender: 触发重新渲染的回调
         approval_event: 审批完成通知事件
         approval_result: 审批结果字典
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     if not pending:
         return
 
@@ -743,7 +760,8 @@ def _word_left(text: str, cursor: int) -> int:
 
     返回:
         新的光标位置
-    """  # if cursor <= 1:
+    """
+    if cursor <= 1:
         return 0
     i = cursor - 1
     while i > 0 and text[i].isspace():
@@ -764,7 +782,8 @@ def _word_right(text: str, cursor: int) -> int:
 
     返回:
         新的光标位置
-    """  # n = len(text)
+    """
+    n = len(text)
     if cursor >= n:
         return n
     i = cursor

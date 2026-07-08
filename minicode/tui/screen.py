@@ -125,7 +125,8 @@ def _is_dumb_terminal() -> bool:
 
     返回:
         若终端为 dumb 类型或输出被重定向到管道，返回 True；否则返回 False。
-    """  # if not sys.stdout.isatty():
+    """
+    if not sys.stdout.isatty():
         return True
     return os.environ.get("TERM", "") in _DUMB_TERMS
 
@@ -150,7 +151,8 @@ def exit_alternate_screen() -> None:
 
     禁用鼠标追踪、括号粘贴模式、聚焦追踪和同步输出。
     在 dumb 终端中静默跳过。
-    """  # if _is_dumb_terminal():
+    """
+    if _is_dumb_terminal():
         return
     sys.stdout.write(DISABLE_MOUSE_TRACKING + EXIT_ALT_SCREEN + DISABLE_BRACKETED_PASTE + ENABLE_SYNC_OUTPUT + DISABLE_FOCUS_TRACKING)
     sys.stdout.flush()

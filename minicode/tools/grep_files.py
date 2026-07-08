@@ -59,7 +59,8 @@ def _matches_glob(path: Path, include_globs: list[str] | None, exclude_globs: li
 
     返回:
         如果文件通过了包含/排除过滤则返回 True。
-    """  # posix_path = path.as_posix()
+    """
+    posix_path = path.as_posix()
     name = path.name
     
     if exclude_globs:
@@ -162,7 +163,8 @@ def _format_results(
 
     返回:
         格式化后的结果字符串，每行格式为 "路径:行号: 内容"。
-    """  # output_parts = []
+    """
+    output_parts = []
     total_matches = 0
     
     for file_path, matches in results:
@@ -218,7 +220,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 pattern 为空或正则表达式无效。
-    """  # pattern = input_data.get("pattern")
+    """
+    pattern = input_data.get("pattern")
     if not isinstance(pattern, str) or not pattern:
         raise ValueError("pattern is required")
     
@@ -271,7 +274,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         ToolResult，包含搜索结果的格式化文本和统计信息。
-    """  # root = resolve_tool_path(context, input_data["path"], "search")
+    """
+    root = resolve_tool_path(context, input_data["path"], "search")
 
     # Compile regex
     flags = 0 if input_data.get("case_sensitive", False) else re.IGNORECASE

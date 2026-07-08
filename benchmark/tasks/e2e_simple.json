@@ -1,0 +1,12 @@
+[
+  {"id":"S01","desc":"写一个 Python 函数 is_even(n) 判断偶数，保存到 even.py","file":"even.py"},
+  {"id":"S02","desc":"写一个函数 reverse_string(s) 反转字符串，保存到 reverse.py","file":"reverse.py"},
+  {"id":"S03","desc":"写一个函数 factorial(n) 计算阶乘，保存到 fact.py","file":"fact.py"},
+  {"id":"S04","desc":"写一个函数 is_prime(n) 判断素数，保存到 prime.py","file":"prime.py"},
+  {"id":"S05","desc":"写一个函数 fibonacci(n) 返回第 n 个斐波那契数，保存到 fib.py","file":"fib.py"},
+  {"id":"S06","desc":"写一个函数 count_vowels(s) 统计字符串中的元音字母数，保存到 vowels.py","file":"vowels.py"},
+  {"id":"S07","desc":"写一个函数 array_sum(arr) 计算列表元素之和，保存到 sum.py","file":"sum.py"},
+  {"id":"S08","desc":"写一个函数 fizzbuzz(n) 返回 1 到 n 的 FizzBuzz 列表，保存到 fizz.py","file":"fizz.py"},
+  {"id":"S09","desc":"写一个函数 celsius_to_fahrenheit(c) 摄氏转华氏，保存到 temp.py","file":"temp.py"},
+  {"id":"S10","desc":"写一个函数 is_palindrome(s) 判断回文字符串，保存到 palin.py","file":"palin.py"}
+]

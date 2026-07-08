@@ -32,7 +32,8 @@ class _ThrottledRenderer:
         self._lock = threading.Lock()
 
     def request(self) -> None:
-        """请求一次渲染（标记待渲染状态，不立即执行）。"""  # with self._lock:
+        """请求一次渲染（标记待渲染状态，不立即执行）。"""
+        with self._lock:
             self._pending = True
 
     def flush(self) -> None:
@@ -40,7 +41,8 @@ class _ThrottledRenderer:
 
         仅在有待渲染标记且距离上次渲染已超过最小间隔时执行，
         否则跳过。线程安全。
-        """  # now = time.monotonic()
+        """
+        now = time.monotonic()
         with self._lock:
             if not self._pending:
                 return
@@ -51,7 +53,8 @@ class _ThrottledRenderer:
         self._render_fn()
 
     def force(self) -> None:
-        """强制立即渲染，忽略节流间隔限制。"""  # with self._lock:
+        """强制立即渲染，忽略节流间隔限制。"""
+        with self._lock:
             self._pending = False
             self._last_render_time = time.monotonic()
         self._render_fn()
@@ -73,7 +76,8 @@ def exit_tty_runtime(prev_sigwinch: object | None) -> None:
 
     参数:
         prev_sigwinch: 之前安装的 SIGWINCH 处理器对象，若为 None 则不恢复。
-    """  # if prev_sigwinch is not None and sys.platform != "win32":
+    """
+    if prev_sigwinch is not None and sys.platform != "win32":
         import signal as _signal
 
         _signal.signal(_signal.SIGWINCH, prev_sigwinch)  # type: ignore[arg-type]
@@ -92,7 +96,8 @@ def install_sigwinch_rerender(throttled: _ThrottledRenderer) -> object | None:
 
     返回:
         之前的 SIGWINCH 处理器对象，若安装失败则返回 None。
-    """  # if sys.platform == "win32" or threading.current_thread() is not threading.main_thread():
+    """
+    if sys.platform == "win32" or threading.current_thread() is not threading.main_thread():
         return None
 
     import signal as _signal

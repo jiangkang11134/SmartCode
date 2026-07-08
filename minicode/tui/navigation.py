@@ -52,7 +52,8 @@ def _get_max_transcript_scroll_offset(args: TtyAppArgs, state: ScreenState) -> i
 
     返回:
         最大可滚动偏移行数。
-    """  # return get_transcript_max_scroll_offset(
+    """
+    return get_transcript_max_scroll_offset(
         state.transcript,
         _get_transcript_body_lines(args, state),
         state.transcript_revision,
@@ -71,7 +72,8 @@ def _scroll_transcript_by(args: TtyAppArgs, state: ScreenState, delta: int) -> b
 
     返回:
         滚动位置是否实际发生改变。
-    """  # max_offset = _get_max_transcript_scroll_offset(args, state)
+    """
+    max_offset = _get_max_transcript_scroll_offset(args, state)
     next_offset = max(0, min(max_offset, state.transcript_scroll_offset + delta))
     if next_offset == state.transcript_scroll_offset:
         return False
@@ -89,7 +91,8 @@ def _jump_transcript_to_edge(args: TtyAppArgs, state: ScreenState, target: str) 
 
     返回:
         滚动位置是否实际发生改变。
-    """  # next_offset = _get_max_transcript_scroll_offset(args, state) if target == "top" else 0
+    """
+    next_offset = _get_max_transcript_scroll_offset(args, state) if target == "top" else 0
     if next_offset == state.transcript_scroll_offset:
         return False
     state.transcript_scroll_offset = next_offset
@@ -107,7 +110,8 @@ def _scroll_pending_approval_by(state: ScreenState, delta: int) -> bool:
 
     返回:
         滚动位置是否实际发生改变。
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     if not pending or not pending.details_expanded:
         return False
     max_offset = get_permission_prompt_max_scroll_offset(pending.request, expanded=True)
@@ -128,7 +132,8 @@ def _toggle_pending_approval_expand(state: ScreenState) -> bool:
 
     返回:
         展开状态是否实际发生切换。
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     if not pending or pending.request.get("kind") != "edit":
         return False
     pending.details_expanded = not pending.details_expanded
@@ -147,7 +152,8 @@ def _move_pending_approval_selection(state: ScreenState, delta: int) -> bool:
 
     返回:
         是否成功移动（若无可用选项则返回 False）。
-    """  # pending = state.pending_approval
+    """
+    pending = state.pending_approval
     if not pending or pending.feedback_mode:
         return False
     total = len(pending.request.get("choices", []))
@@ -168,7 +174,8 @@ def _history_up(state: ScreenState) -> bool:
 
     返回:
         是否成功向上导航（历史已到最旧记录则返回 False）。
-    """  # if not state.history or state.history_index <= 0:
+    """
+    if not state.history or state.history_index <= 0:
         return False
     if state.history_index == len(state.history):
         state.history_draft = state.input
@@ -188,7 +195,8 @@ def _history_down(state: ScreenState) -> bool:
 
     返回:
         是否成功向下导航（已在最新位置则返回 False）。
-    """  # if state.history_index >= len(state.history):
+    """
+    if state.history_index >= len(state.history):
         return False
     state.history_index += 1
     state.input = (
@@ -211,7 +219,8 @@ def _get_visible_commands(input_text: str) -> list[Any]:
 
     返回:
         匹配的斜杠命令对象列表，无匹配时返回空列表。
-    """  # if not input_text.startswith("/"):
+    """
+    if not input_text.startswith("/"):
         return []
     if input_text == "/":
         return SLASH_COMMANDS

@@ -58,7 +58,8 @@ def _strip_ansi(text: str) -> str:
 
     返回:
         移除了所有 ANSI 转义码后的纯文本
-    """  # return _ANSI_RE.sub("", text)
+    """
+    return _ANSI_RE.sub("", text)
 
 
 def _char_display_width(ch: str) -> int:
@@ -69,7 +70,8 @@ def _char_display_width(ch: str) -> int:
 
     返回:
         显示宽度，1 或 2
-    """  # code = ord(ch)
+    """
+    code = ord(ch)
     if 0x1100 <= code <= 0x115F or code in (0x2329, 0x232A):
         return 2
     if 0x2E80 <= code <= 0xA4CF and code != 0x303F:
@@ -97,7 +99,8 @@ def _string_display_width(text: str) -> int:
 
     返回:
         显示列宽总和
-    """  # return sum(_char_display_width(ch) for ch in _strip_ansi(text))
+    """
+    return sum(_char_display_width(ch) for ch in _strip_ansi(text))
 
 
 def _transcript_panel_width() -> int:
@@ -122,7 +125,8 @@ def _wrap_panel_body_line(line: str, width: int) -> list[str]:
 
     返回:
         换行后的文本行列表
-    """  # inner = max(0, width - 4)
+    """
+    inner = max(0, width - 4)
     if inner <= 0:
         return [""]
     if _string_display_width(line) <= inner:
@@ -155,7 +159,8 @@ def _is_runtime_progress_message(text: str) -> bool:
 
     返回:
         若是运行时进度消息返回 True，否则 False
-    """  # normalized = " ".join((text or "").split()).lower()
+    """
+    normalized = " ".join((text or "").split()).lower()
     runtime_prefixes = (
         "runtime phase:",
         "verification guard:",
@@ -179,7 +184,8 @@ def _is_runtime_entry(entry: TranscriptEntry) -> bool:
 
     返回:
         若条目类别为 runtime 或内容为运行时进度消息则返回 True
-    """  # return entry.category == "runtime" or _is_runtime_progress_message(entry.body)
+    """
+    return entry.category == "runtime" or _is_runtime_progress_message(entry.body)
 
 
 def _runtime_label_text(entry: TranscriptEntry) -> str:
@@ -190,7 +196,8 @@ def _runtime_label_text(entry: TranscriptEntry) -> str:
 
     返回:
         格式如 "runtime:<kind>" 或默认 "runtime" 的标签
-    """  # runtime_kind = (entry.runtimeKind or "").strip()
+    """
+    runtime_kind = (entry.runtimeKind or "").strip()
     return f"runtime:{runtime_kind}" if runtime_kind else "runtime"
 
 
@@ -202,7 +209,8 @@ def _runtime_meta_suffix(entry: TranscriptEntry) -> str:
 
     返回:
         包含 step/phase/reason/verify 等信息的后缀字符串，非运行时条目返回空串
-    """  # if not _is_runtime_entry(entry):
+    """
+    if not _is_runtime_entry(entry):
         return ""
 
     meta_parts: list[str] = []
@@ -228,7 +236,8 @@ def _runtime_trace_token(entry: TranscriptEntry) -> str | None:
 
     返回:
         追踪令牌字符串，非运行时条目返回 None
-    """  # if not _is_runtime_entry(entry):
+    """
+    if not _is_runtime_entry(entry):
         return None
 
     step_suffix = f"@{entry.runtimeStep}" if entry.runtimeStep is not None else ""
@@ -287,7 +296,8 @@ def format_runtime_summary_line(entries: list[TranscriptEntry]) -> str | None:
 
     返回:
         格式为 "runtime-summary: <摘要>" 的字符串，无可摘要内容时返回 None
-    """  # runtime_summary = _runtime_trace_summary(entries)
+    """
+    runtime_summary = _runtime_trace_summary(entries)
     if not runtime_summary:
         return None
     return f"runtime-summary: {runtime_summary}"
@@ -302,7 +312,8 @@ def _indent_block(text: str, prefix: str = "  ") -> str:
 
     返回:
         每行均已添加前缀后的文本
-    """  # return "\n".join(prefix + line for line in text.split("\n"))
+    """
+    return "\n".join(prefix + line for line in text.split("\n"))
 
 
 def preview_tool_body(tool_name: str, body: str) -> str:
@@ -314,7 +325,8 @@ def preview_tool_body(tool_name: str, body: str) -> str:
 
     返回:
         截断后的文本，若被截断则追加截断提示
-    """  # max_chars = 1000 if tool_name == "read_file" else 1800
+    """
+    max_chars = 1000 if tool_name == "read_file" else 1800
     max_lines = 20 if tool_name == "read_file" else 36
 
     lines = body.split("\n")
@@ -338,7 +350,8 @@ def _render_transcript_entry(entry: TranscriptEntry) -> str:
 
     返回:
         渲染后的 ANSI 字符串，未知类型返回空串
-    """  # t = theme()
+    """
+    t = theme()
 
     if entry.kind == "user":
         label = f"{t.user}{t.bold}▶ you{t.reset}"
@@ -422,7 +435,8 @@ def _render_tool_body(entry, body_lines, total_lines, collapsible, is_collapsed)
 
     返回:
         渲染后的内容字符串（含 ANSI 转义码）
-    """  # t = theme()
+    """
+    t = theme()
     body = entry.body
 
     if entry.toolName in _DIFF_TOOLS and _looks_like_diff_block(body):
@@ -450,7 +464,8 @@ def get_transcript_window_size(window_size: int | None = None) -> int:
 
     返回:
         窗口行数，最小为 4（指定时）或 8（自动计算时）
-    """  # if window_size is not None:
+    """
+    if window_size is not None:
         return max(4, window_size)
     _, rows = _cached_terminal_size()
     return max(8, rows - 15)
@@ -500,7 +515,8 @@ def _entry_cache_key(entry: TranscriptEntry) -> _EntryCacheKey:
 
     返回:
         包含条目渲染状态所有相关字段的缓存键元组
-    """  # return (
+    """
+    return (
         entry.kind,
         entry.body,
         entry.category,
@@ -527,7 +543,8 @@ def _get_entry_lines(entry: TranscriptEntry) -> list[str]:
 
     返回:
         渲染后的文本行列表
-    """  # content_key = _entry_cache_key(entry)
+    """
+    content_key = _entry_cache_key(entry)
     width = _transcript_panel_width()
     cache_key = (content_key, width)
 
@@ -562,7 +579,8 @@ def _get_entry_line_count(entry: TranscriptEntry) -> int:
 
     返回:
         条目占用的可视行数
-    """  # content_key = _entry_cache_key(entry)
+    """
+    content_key = _entry_cache_key(entry)
     width = _transcript_panel_width()
     cache_key = (content_key, width)
 
@@ -594,7 +612,8 @@ def _layout_cache_key(
 
     返回:
         布局缓存键元组，revision 为 None 时返回 None
-    """  # if revision is None:
+    """
+    if revision is None:
         return None
     return (id(entries), revision, len(entries), _transcript_panel_width())
 
@@ -614,7 +633,8 @@ def _build_transcript_layout(
 
     返回:
         包含所有条目布局信息的 TranscriptLayout 对象
-    """  # cache_key = _layout_cache_key(entries, revision)
+    """
+    cache_key = _layout_cache_key(entries, revision)
     if cache_key is not None:
         cached = _layout_cache.get(cache_key)
         if cached is not None:
@@ -656,7 +676,8 @@ def _compute_total_lines(entries: list[TranscriptEntry], revision: int | None = 
 
     返回:
         总行数，条目为空时返回 0
-    """  # if not entries:
+    """
+    if not entries:
         return 0
     return _build_transcript_layout(entries, revision).total_lines
 
@@ -679,7 +700,8 @@ def _render_visible_window(
 
     返回:
         可见范围内的渲染文本行列表
-    """  # if not entries:
+    """
+    if not entries:
         return []
 
     layout = _build_transcript_layout(entries, revision)
@@ -730,7 +752,8 @@ def get_transcript_max_scroll_offset(
 
     返回:
         最大滚动偏移行数，条目为空时返回 0
-    """  # if not entries:
+    """
+    if not entries:
         return 0
     total = _compute_total_lines(entries, revision)
     ws = get_transcript_window_size(window_size)
@@ -755,7 +778,8 @@ def render_transcript(
 
     返回:
         完整的转录面板渲染字符串（含 ANSI 转义码和滚动条）
-    """  # t = theme()
+    """
+    t = theme()
     if not entries:
         return ""
 
@@ -803,7 +827,8 @@ def _render_scrollbar(offset: int, max_offset: int, height: int) -> list[str]:
 
     返回:
         每行对应的滚动条字符列表
-    """  # if max_offset <= 0 or height < 3:
+    """
+    if max_offset <= 0 or height < 3:
         return [" "] * max(1, height)
     # Thumb position with sub-character precision
     ratio = offset / max_offset
@@ -838,7 +863,8 @@ def _interleave_scrollbar(body: str, scrollbar: list[str]) -> str:
 
     返回:
         每行末尾追加了滚动条字符的完整文本
-    """  # lines = body.split("\n")
+    """
+    lines = body.split("\n")
     result = []
     for i, line in enumerate(lines):
         if i < len(scrollbar):
@@ -876,7 +902,8 @@ def format_transcript_text(entries: list[TranscriptEntry]) -> str:
 
     返回:
         纯文本格式的转录内容，条目间以 ``---`` 分隔
-    """  # parts = []
+    """
+    parts = []
     runtime_summary_line = format_runtime_summary_line(entries)
     if runtime_summary_line:
         parts.append(f"runtime-summary\n  {runtime_summary_line.removeprefix('runtime-summary: ')}")

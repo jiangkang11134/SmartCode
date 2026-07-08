@@ -86,7 +86,8 @@ def strip_ansi(text: str) -> str:
 
     返回:
         纯文本字符串，不含任何 ANSI 控制码
-    """  # return _ANSI_RE.sub("", text)
+    """
+    return _ANSI_RE.sub("", text)
 
 
 # ---------------------------------------------------------------------------
@@ -148,7 +149,8 @@ def char_display_width(char: str) -> int:
 
     返回:
         显示宽度 (0、1 或 2)
-    """  # if not char:
+    """
+    if not char:
         return 0
     code = ord(char)
     if (
@@ -180,7 +182,8 @@ def _stripped_display_width(stripped: str) -> int:
 
     返回:
         显示宽度总和
-    """  # wide_chars = len(_WIDE_CHAR_PATTERN.findall(stripped))
+    """
+    wide_chars = len(_WIDE_CHAR_PATTERN.findall(stripped))
     return len(stripped) + wide_chars
 
 
@@ -195,7 +198,8 @@ def string_display_width(text: str) -> int:
 
     返回:
         显示宽度总和
-    """  # stripped = _ANSI_RE.sub("", text)
+    """
+    stripped = _ANSI_RE.sub("", text)
     return _stripped_display_width(stripped)
 
 
@@ -211,7 +215,8 @@ def truncate_plain(text: str, width: int) -> str:
 
     返回:
         截断或原样返回的文本
-    """  # if string_display_width(text) <= width:
+    """
+    if string_display_width(text) <= width:
         return text
 
     limit = max(0, width - 3)
@@ -254,7 +259,8 @@ def pad_plain(text: str, width: int) -> str:
 
     返回:
         右填充空格后的文本
-    """  # display_w = string_display_width(text)
+    """
+    display_w = string_display_width(text)
     return text + (" " * max(0, width - display_w))
 
 
@@ -270,7 +276,8 @@ def truncate_path_middle(path: str, width: int) -> str:
 
     返回:
         中间截断后的路径文本
-    """  # if string_display_width(path) <= width:
+    """
+    if string_display_width(path) <= width:
         return path
     if width <= 5:
         return truncate_plain(path, width)
@@ -308,7 +315,8 @@ def color_badge(label: str, value: str, color: str, icon: str = "") -> str:
 
     返回:
         格式化后的徽章字符串
-    """  # t = theme()
+    """
+    t = theme()
     icon_part = f"{color}{icon} " if icon else ""
     return f"{icon_part}{color}{t.dim}[{label}]{t.reset} {t.bold}{value}{t.reset}"
 
@@ -323,7 +331,8 @@ def border_line(kind: str, width: int, color: str = "") -> str:
 
     返回:
         带 ANSI 颜色的单行边框字符串
-    """  # c = color or BORDER
+    """
+    c = color or BORDER
     if kind == "top":
         return f"{c}╭{'─' * (width - 2)}╮{RESET}"
     elif kind == "bottom":
@@ -346,7 +355,8 @@ def panel_row(left: str, width: int, right: str | None = None, border_color: str
 
     返回:
         带边框的一行字符串
-    """  # bc = border_color or BORDER
+    """
+    bc = border_color or BORDER
     inner_width = width - 4
     if right:
         l_w = string_display_width(left)
@@ -376,7 +386,8 @@ def wrap_panel_body_line(line: str, width: int) -> list[str]:
 
     返回:
         折行后的字符串列表
-    """  # inner_width = width - 4
+    """
+    inner_width = width - 4
     if string_display_width(line) <= inner_width:
         return [line]
 
@@ -446,7 +457,8 @@ def render_panel(
 
     返回:
         完整面板字符串（含换行）
-    """  # t = theme()
+    """
+    t = theme()
     width, _ = _cached_terminal_size()
     if width < 40:
         width = 40
@@ -517,7 +529,8 @@ def render_banner(
 
     返回:
         渲染后的工作区面板字符串
-    """  # t = theme()
+    """
+    t = theme()
 
     model = runtime.get("model", "(unconfigured)") if runtime else "(unconfigured)"
 
@@ -587,7 +600,8 @@ def render_status_line(status: str | None) -> str:
 
     返回:
         带 ANSI 颜色的单行状态字符串
-    """  # t = theme()
+    """
+    t = theme()
     if status:
         import time as _time
         # Shimmer: animate a traveling highlight across the status text when thinking
@@ -629,7 +643,8 @@ def render_tool_panel(
 
     返回:
         工具活动摘要字符串
-    """  # t = theme()
+    """
+    t = theme()
     if background_tasks is None:
         background_tasks = []
     parts: list[str] = []
@@ -668,7 +683,8 @@ def render_footer_bar(
 
     返回:
         带对齐的单行页脚字符串
-    """  # t = theme()
+    """
+    t = theme()
     if background_tasks is None:
         background_tasks = []
     width, _ = _cached_terminal_size()
@@ -700,7 +716,8 @@ def render_slash_menu(commands: list[Any], selected_index: int) -> str:
 
     返回:
         多行菜单字符串
-    """  # t = theme()
+    """
+    t = theme()
     if not commands:
         return f"{t.subtle}no commands{t.reset}"
     width, _ = _cached_terminal_size()
@@ -732,7 +749,8 @@ def classify_diff_line(line: str) -> str:
 
     返回:
         行类型：'meta'（元数据行，---/+++/@@）、'add'（新增行）、'remove'（删除行）、'context'（上下文行）
-    """  # if line.startswith(("+++", "---", "@@")):
+    """
+    if line.startswith(("+++", "---", "@@")):
         return "meta"
     if line.startswith("+"):
         return "add"
@@ -753,7 +771,8 @@ def compute_changed_range(removed: str, added: str) -> tuple[int, int] | None:
 
     返回:
         ``(start, end)`` 区间（在 ``added`` 中的位置），或 ``None``
-    """  # if not removed or not added:
+    """
+    if not removed or not added:
         return None
     p = 0
     while p < len(removed) and p < len(added) and removed[p] == added[p]:
@@ -777,7 +796,8 @@ def apply_word_emphasis(content: str, color: str, emphasis_range: tuple[int, int
 
     返回:
         带 ANSI 着色和高亮的字符串
-    """  # if not emphasis_range:
+    """
+    if not emphasis_range:
         return f"{color}{content}{RESET}"
     s, e = emphasis_range
     return f"{color}{content[:s]}{BOLD}{REVERSE}{content[s:e]}{RESET}{color}{content[e:]}{RESET}"
@@ -797,7 +817,8 @@ def colorize_unified_diff_block(block: str) -> str:
 
     返回:
         着色后的 diff 文本字符串
-    """  # lines = block.splitlines()
+    """
+    lines = block.splitlines()
     res: list[str] = []
     i = 0
     while i < len(lines):
@@ -844,7 +865,8 @@ def _looks_like_diff_block(detail: str) -> bool:
 
     返回:
         是否为 diff 文本块
-    """  # return "\n" in detail and (
+    """
+    return "\n" in detail and (
         "--- a/" in detail or "+++ b/" in detail or "@@ " in detail
     )
 
@@ -860,7 +882,8 @@ def colorize_edit_permission_details(details: list[str]) -> list[str]:
 
     返回:
         着色处理后的字符串列表
-    """  # return [
+    """
+    return [
         colorize_unified_diff_block(d) if _looks_like_diff_block(d) else d
         for d in details
     ]
@@ -883,7 +906,8 @@ def get_permission_prompt_max_scroll_offset(
 
     返回:
         最大滚动偏移量（行数）
-    """  # if not expanded:
+    """
+    if not expanded:
         return 0
     flat = flatten_detail_lines(request.get("details", []))
     _, rows = _cached_terminal_size()
@@ -919,7 +943,8 @@ def slice_visible_details(
 
     返回:
         ``(visible_lines, total_lines)`` 二元组
-    """  # if max_visible is None:
+    """
+    if max_visible is None:
         _, rows = _cached_terminal_size()
         max_visible = max(4, rows - 20)
     total = len(flat_lines)
@@ -953,7 +978,8 @@ def render_permission_prompt(
 
     返回:
         完整的面板字符串
-    """  # t = theme()
+    """
+    t = theme()
     lines: list[str] = []
     if feedback_mode:
         lines.extend([

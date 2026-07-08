@@ -13,7 +13,7 @@ import threading
 from typing import Any, Callable
 from minicode.tui.state import AggregatedEditProgress, ScreenState, TtyAppArgs
 from minicode.cli_commands import try_handle_local_command, find_matching_slash_commands
-from minicode.agent_loop_lite import run_agent_turn
+from minicode.agent_loop import run_agent_turn
 from minicode.context_manager import save_context_state
 from minicode.history import save_history_entries
 from minicode.local_tool_shortcuts import parse_local_tool_shortcut
@@ -92,7 +92,8 @@ def _read_raw_char() -> str:
 
     返回:
         读取到的字符；若无可用输入则返回空字符串。
-    """  # if sys.platform == "win32":
+    """
+    if sys.platform == "win32":
         return _win_read_one_key()
     else:
         import select
@@ -116,7 +117,8 @@ def _read_raw_chunk() -> str:
 
     返回:
         包含所有可用输入的字符串；若无可用输入则返回空字符串。
-    """  # if sys.platform == "win32":
+    """
+    if sys.platform == "win32":
         result = ""
         while True:
             ch = _win_read_one_key()
@@ -176,7 +178,8 @@ class _RawModeContext:
 
         返回:
             自身实例。
-        """  # if sys.platform == "win32":
+        """
+        if sys.platform == "win32":
             # Ensure VT processing is active (idempotent)
             from minicode.tui.screen import _enable_windows_vt_processing
             _enable_windows_vt_processing()
@@ -237,7 +240,8 @@ class _RawModeContext:
         在 Windows 上恢复控制台代码页。
         在 Unix 上通过 termios 恢复标准输入的原始终端设置，
         并恢复 SIGWINCH 信号处理函数。
-        """  # if sys.platform == "win32":
+        """
+        if sys.platform == "win32":
             if self._old_cp is not None:
                 try:
                     import ctypes
@@ -343,7 +347,8 @@ def _handle_input(
 
     返回:
         如果输入为 /exit 则返回 True，否则返回 False
-    """  # if state.is_busy:
+    """
+    if state.is_busy:
         # Animated spinner during tool execution
         import time
         spinners = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']

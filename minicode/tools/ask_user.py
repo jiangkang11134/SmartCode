@@ -25,7 +25,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 question 缺失或为空。
-    """  # question = input_data.get("question")
+    """
+    question = input_data.get("question")
     if not isinstance(question, str) or not question.strip():
         raise ValueError("question is required")
     return {"question": question.strip()}
@@ -43,7 +44,8 @@ def _run(input_data: dict, _context) -> ToolResult:
 
     返回:
         ToolResult: 始终返回 ok=True，并将 awaitUser 设为 True。
-    """  # return ToolResult(ok=True, output=input_data["question"], awaitUser=True)
+    """
+    return ToolResult(ok=True, output=input_data["question"], awaitUser=True)
 
 
 ask_user_tool = ToolDefinition(

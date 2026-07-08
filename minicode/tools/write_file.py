@@ -20,7 +20,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 path 为空或类型错误、content 不是字符串。
-    """  # path = input_data.get("path")
+    """
+    path = input_data.get("path")
     content = input_data.get("content")
     if not isinstance(path, str) or not path:
         raise ValueError("path is required")
@@ -37,7 +38,8 @@ def _run(input_data: dict, context):
     参数:
         input_data: 已验证的输入字典，包含 path 和 content。
         context: 工具执行上下文，用于解析工作区路径和进行文件审阅。
-    """  # target = resolve_tool_path(context, input_data["path"], "write")
+    """
+    target = resolve_tool_path(context, input_data["path"], "write")
     return apply_reviewed_file_change(context, input_data["path"], target, input_data["content"])
 
 

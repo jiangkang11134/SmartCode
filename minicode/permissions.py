@@ -520,7 +520,12 @@ class PermissionManager:
 
         if self.prompt is None:
             log_permission_check("run_command", signature, granted=False)
-            raise RuntimeError(f"Command requires approval: {signature}. Start minicode in TTY mode to approve it.")
+            raise RuntimeError(
+                f"Non-interactive mode: command '{command}' blocked.\n"
+                f"  - To write files: use write_file tool instead.\n"
+                f"  - To edit files: use edit_file tool instead.\n"
+                f"  - To run tests: use test_runner tool instead."
+            )
         # Distinguish forced prompts (external trigger) from dangerous commands
         summary = (
             "mini-code wants to run a dangerous command"
@@ -596,8 +601,15 @@ class PermissionManager:
             raise RuntimeError(f"Edit blocked by auto mode: {assessment.reason}")
 
         if self.prompt is None:
+            # Non-interactive mode: auto-allow edits within workspace
+            if normalized_target.startswith(self.workspace_root):
+                self.session_allowed_edits.add(normalized_target)
+                log_permission_check("edit_file", normalized_target, granted=True)
+                return
             log_permission_check("edit_file", normalized_target, granted=False)
-            raise RuntimeError(f"Edit requires approval: {normalized_target}. Start minicode in TTY mode to review it.")
+            raise RuntimeError(
+                f"Non-interactive mode: edit to '{normalized_target}' blocked (outside workspace)."
+            )
         result = self.prompt(
             {
                 "kind": "edit",

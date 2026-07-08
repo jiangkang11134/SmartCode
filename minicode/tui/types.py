@@ -56,7 +56,8 @@ def _create_transcript_entry(
     collapsedSummary: str | None = None,
     collapsePhase: Literal[1, 2, 3] | None = None,
 ) -> TranscriptEntry:
-    """创建 TranscriptEntry，使用对象池减少 GC 压力"""  # if _entry_pool:
+    """创建 TranscriptEntry，使用对象池减少 GC 压力"""
+    if _entry_pool:
         entry = _entry_pool.pop()
         entry.id = id
         entry.kind = kind
@@ -93,5 +94,6 @@ def _create_transcript_entry(
 
 
 def _recycle_transcript_entry(entry: TranscriptEntry) -> None:
-    """回收 TranscriptEntry 到对象池"""  # if len(_entry_pool) < _POOL_MAX_SIZE:
+    """回收 TranscriptEntry 到对象池"""
+    if len(_entry_pool) < _POOL_MAX_SIZE:
         _entry_pool.append(entry)

@@ -177,7 +177,8 @@ def _highlight_code(line: str, lang: str = "") -> str:
 
     返回:
         带 ANSI 着色的代码行字符串
-    """  # if not lang:
+    """
+    if not lang:
         return f"{CODE_BG}{DIM} {line} {RESET}"
     
     keywords = _KEYWORDS.get(lang.lower(), set())
@@ -248,7 +249,8 @@ def _inline_replace(m: Match) -> str:
 
     返回:
         替换后的 ANSI 格式化字符串
-    """  # if m.group(1) is not None:
+    """
+    if m.group(1) is not None:
         # Inline code
         return f"{CODE_BG}{CODE_FG}{m.group(1)}{RESET}"
     if m.group(2) is not None:

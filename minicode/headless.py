@@ -123,7 +123,7 @@ def run_headless(prompt: str | None = None, allow_edits: bool = False) -> str:
     返回:
         助手的响应文本。
     """
-    from minicode.agent_loop_lite import run_agent_turn
+    from minicode.agent_loop import run_agent_turn
     from minicode.config import load_runtime_config
     from minicode.memory import MemoryManager
     from minicode.model_registry import create_model_adapter

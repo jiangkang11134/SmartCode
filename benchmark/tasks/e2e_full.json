@@ -1,0 +1,222 @@
+[
+  {
+    "id": "T001", "source": "HE/6", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现斐波那契数列并优化",
+    "steps": [
+      "【文件: utils.py】写一个函数 fibonacci(n) 返回第 n 个斐波那契数，n 从 0 开始",
+      "【文件: utils.py】给 fibonacci 加缓存优化（记忆化），避免重复计算",
+      "【文件: main.py】导入 utils.py 中的 fibonacci，打印前 20 个数"
+    ],
+    "test_files": ["utils.py", "main.py"]
+  },
+  {
+    "id": "T002", "source": "HE/4", "difficulty": "中等",
+    "category": "multi-turn",
+    "description": "实现回文检测并扩展功能",
+    "steps": [
+      "【文件: palindrome_checker.py】写一个函数 is_palindrome(s) 判断字符串是否是回文",
+      "【文件: palindrome_checker.py】给 is_palindrome 加参数 ignore_case=True，忽略大小写",
+      "【文件: palindrome_checker.py】创建一个 PalindromeChecker 类，把 is_palindrome 作为类方法"
+    ],
+    "test_files": ["palindrome_checker.py"]
+  },
+  {
+    "id": "T003", "source": "HE/1", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现字符串工具库",
+    "steps": [
+      "【文件: string_utils.py】写一个函数 reverse(s) 反转字符串",
+      "【文件: string_utils.py】增加 count_vowels(s) 统计元音字母数",
+      "【文件: demo.py】导入 string_utils，调用两个函数并打印结果"
+    ],
+    "test_files": ["string_utils.py", "demo.py"]
+  },
+  {
+    "id": "T004", "source": "MBPP/1", "difficulty": "简单",
+    "category": "multi-turn",
+    "description": "计算矩形相关属性",
+    "steps": [
+      "【文件: shapes.py】写一个函数 rectangle_area(length, width) 计算矩形面积",
+      "【文件: shapes.py】增加 rectangle_perimeter(length, width) 计算周长",
+      "【文件: shapes.py】创建一个 Rectangle 类，包含 area() 和 perimeter() 方法"
+    ],
+    "test_files": ["shapes.py"]
+  },
+  {
+    "id": "T005", "source": "HE/2", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现数字工具函数集",
+    "steps": [
+      "【文件: math_utils.py】写 is_even(n) 判断偶数",
+      "【文件: math_utils.py】增加 is_prime(n) 判断素数",
+      "【文件: math_utils.py】增加 factorial(n) 计算阶乘",
+      "【文件: demo.py】导入 math_utils，演示所有函数"
+    ],
+    "test_files": ["math_utils.py", "demo.py"]
+  },
+  {
+    "id": "T006", "source": "HE/21", "difficulty": "复杂",
+    "category": "multi-file",
+    "description": "实现常用字符串算法库",
+    "steps": [
+      "【文件: string_algo.py】写一个函数 longest_common_prefix(strs) 找最长公共前缀",
+      "【文件: string_algo.py】增加 longest_common_suffix(strs) 找最长公共后缀",
+      "【文件: test_string_algo.py】对两个函数做单元测试"
+    ],
+    "test_files": ["string_algo.py", "test_string_algo.py"]
+  },
+  {
+    "id": "T007", "source": "HE/23", "difficulty": "复杂",
+    "category": "multi-turn",
+    "description": "实现括号匹配及扩展",
+    "steps": [
+      "【文件: bracket_checker.py】写一个函数 is_balanced(s) 判断括号是否匹配（只处理小括号）",
+      "【文件: bracket_checker.py】扩展支持中括号和大括号：is_balanced_extended(s)",
+      "【文件: bracket_checker.py】创建 BracketChecker 类，包含两个方法"
+    ],
+    "test_files": ["bracket_checker.py"]
+  },
+  {
+    "id": "T008", "source": "MBPP/15", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现列表工具函数",
+    "steps": [
+      "【文件: list_utils.py】写 chunk_list(arr, n) 把列表分组成每 n 个一组",
+      "【文件: list_utils.py】增加 flatten_list(nested) 展平嵌套列表",
+      "【文件: demo.py】导入 list_utils，演示两个功能"
+    ],
+    "test_files": ["list_utils.py", "demo.py"]
+  },
+  {
+    "id": "T009", "source": "HE/28", "difficulty": "简单",
+    "category": "multi-turn",
+    "description": "实现 FizzBuzz 变体",
+    "steps": [
+      "【文件: fizzbuzz.py】写 fizzbuzz(n) 返回 1 到 n 的 FizzBuzz 列表",
+      "【文件: fizzbuzz.py】加参数 rules 允许自定义映射",
+      "【文件: fizzbuzz.py】创建 FizzBuzz 类，支持配置规则字典"
+    ],
+    "test_files": ["fizzbuzz.py"]
+  },
+  {
+    "id": "T010", "source": "MBPP/21", "difficulty": "复杂",
+    "category": "multi-file",
+    "description": "实现会议室调度算法",
+    "steps": [
+      "【文件: meeting_scheduler.py】写 min_meeting_rooms(intervals) 计算最少会议室",
+      "【文件: meeting_scheduler.py】增加 merge_intervals(intervals) 合并重叠区间",
+      "【文件: test_meeting_scheduler.py】为两个函数写测试"
+    ],
+    "test_files": ["meeting_scheduler.py", "test_meeting_scheduler.py"]
+  },
+  {
+    "id": "T011", "source": "HE/24", "difficulty": "中等",
+    "category": "multi-turn",
+    "description": "实现数组旋转和处理",
+    "steps": [
+      "【文件: array_utils.py】写 rotate_array(arr, k) 向右旋转 k 步",
+      "【文件: array_utils.py】写 rotate_array_left(arr, k) 向左旋转 k 步",
+      "【文件: array_utils.py】确保两个函数都存在"
+    ],
+    "test_files": ["array_utils.py"]
+  },
+  {
+    "id": "T012", "source": "MBPP/14", "difficulty": "简单",
+    "category": "multi-file",
+    "description": "实现字典查询工具",
+    "steps": [
+      "【文件: dict_utils.py】写 find_keys_by_value(d, target) 返回所有值为 target 的键",
+      "【文件: dict_utils.py】写 find_all_values_by_keys(d, keys) 根据键列表取值",
+      "【文件: demo.py】导入 dict_utils 展示用法"
+    ],
+    "test_files": ["dict_utils.py", "demo.py"]
+  },
+  {
+    "id": "T013", "source": "HE/14", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现集合操作工具",
+    "steps": [
+      "【文件: set_ops.py】写 intersection(a, b) 返回交集",
+      "【文件: set_ops.py】增加 union(a, b) 和 difference(a, b)",
+      "【文件: test_set_ops.py】写测试文件"
+    ],
+    "test_files": ["set_ops.py", "test_set_ops.py"]
+  },
+  {
+    "id": "T014", "source": "MBPP/13", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现字符串对比工具",
+    "steps": [
+      "【文件: str_compare.py】写 common_prefix(s1, s2) 返回最长公共前缀",
+      "【文件: str_compare.py】写 common_suffix(s1, s2) 返回最长公共后缀",
+      "【文件: demo.py】从命令行读取两个字符串并调用函数输出结果"
+    ],
+    "test_files": ["str_compare.py", "demo.py"]
+  },
+  {
+    "id": "T015", "source": "MBPP/12", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现数学判断工具",
+    "steps": [
+      "【文件: math_check.py】写 is_perfect_square(n) 判断完全平方数",
+      "【文件: math_check.py】写 is_power_of_two(n) 判断 2 的幂",
+      "【文件: demo.py】循环检查 1 到 100 之间所有完全平方数并打印"
+    ],
+    "test_files": ["math_check.py", "demo.py"]
+  },
+  {
+    "id": "T016", "source": "HE/25", "difficulty": "复杂",
+    "category": "multi-turn",
+    "description": "实现 Top K 频率统计",
+    "steps": [
+      "【文件: frequency.py】写 top_k_frequent(arr, k) 返回频率最高的 k 个元素",
+      "【文件: frequency.py】增加 FrequencyCounter 类，支持 add(item) 和 get_top(k)",
+      "【文件: frequency.py】确保类和函数都可用"
+    ],
+    "test_files": ["frequency.py"]
+  },
+  {
+    "id": "T017", "source": "HE/18", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现数组查找工具",
+    "steps": [
+      "【文件: array_search.py】写 find_missing(arr, n) 找出缺失数",
+      "【文件: array_search.py】写 find_duplicates(arr) 找出重复元素",
+      "【文件: test_array_search.py】写测试"
+    ],
+    "test_files": ["array_search.py", "test_array_search.py"]
+  },
+  {
+    "id": "T018", "source": "MBPP/22", "difficulty": "复杂",
+    "category": "multi-file",
+    "description": "实现变位词分组工具",
+    "steps": [
+      "【文件: anagram_grouper.py】写 group_anagrams(words) 按变位词分组",
+      "【文件: demo.py】读取 words.txt，调用 group_anagrams 输出结果"
+    ],
+    "test_files": ["anagram_grouper.py", "demo.py"]
+  },
+  {
+    "id": "T019", "source": "HE/22", "difficulty": "中等",
+    "category": "multi-file",
+    "description": "实现矩阵操作工具",
+    "steps": [
+      "【文件: matrix_ops.py】写 transpose(matrix) 计算矩阵转置",
+      "【文件: matrix_ops.py】写 matrix_multiply(a, b) 计算矩阵乘法",
+      "【文件: demo.py】创建矩阵并演示转置和乘法"
+    ],
+    "test_files": ["matrix_ops.py", "demo.py"]
+  },
+  {
+    "id": "T020", "source": "MBPP/28", "difficulty": "复杂",
+    "category": "multi-file",
+    "description": "实现数字转换工具",
+    "steps": [
+      "【文件: roman.py】写 to_roman(num) 整数转罗马数字",
+      "【文件: roman.py】写 from_roman(s) 罗马数字转整数",
+      "【文件: test_roman.py】做双向转换测试"
+    ],
+    "test_files": ["roman.py", "test_roman.py"]
+  }
+]

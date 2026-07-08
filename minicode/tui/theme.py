@@ -19,7 +19,8 @@ def _rgb(r: int, g: int, b: int) -> str:
 
     返回:
         str: 24 位前景色 ANSI 转义序列
-    """  # return f"\x1b[38;2;{r};{g};{b}m"
+    """
+    return f"\x1b[38;2;{r};{g};{b}m"
 
 
 def _rgb_bg(r: int, g: int, b: int) -> str:
@@ -32,7 +33,8 @@ def _rgb_bg(r: int, g: int, b: int) -> str:
 
     返回:
         str: 24 位背景色 ANSI 转义序列
-    """  # return f"\x1b[48;2;{r};{g};{b}m"
+    """
+    return f"\x1b[48;2;{r};{g};{b}m"
 
 
 @dataclass(frozen=True)
@@ -88,7 +90,8 @@ def _default_theme() -> ColorTheme:
 
     返回:
         ColorTheme: 包含 Morandi 色系各颜色分量的主题实例
-    """  # return ColorTheme(
+    """
+    return ColorTheme(
         # Section borders — Morandi tones
         header=_rgb(120, 150, 140),      # muted teal
         session=_rgb(140, 120, 160),     # muted purple

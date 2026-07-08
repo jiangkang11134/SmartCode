@@ -146,7 +146,7 @@ def _validate_mcp_command(command: str) -> None:
 
 def _validate_mcp_args(args: list[str]) -> None:
     """验证 MCP 参数不包含危险的 shell 元字符"""
-    # for arg in args:
+    for arg in args:
         for char in arg:
             if char in DANGEROUS_SHELL_CHARS:
                 raise RuntimeError(
@@ -168,7 +168,7 @@ def _prepare_spawn(command: str, args: list[str]) -> tuple[list[str] | str, dict
     返回 ``(spawn_exec, extra_popen_kwargs)``：``spawn_exec`` 在 ``shell=False`` 时为
     列表，在 ``shell=True`` 时为单条命令行字符串。
     """
-    # if os.name == "nt":
+    if os.name == "nt":
         resolved = shutil.which(command)
         if resolved:
             if resolved.lower().endswith((".cmd", ".bat")):
@@ -198,7 +198,7 @@ def _normalize_input_schema(schema: dict[str, Any] | None) -> dict[str, Any]:
     返回:
         格式化后的字符串
     """
-    # if not isinstance(block, dict):
+    if not isinstance(block, dict):
         return json.dumps(block, indent=2, ensure_ascii=False)
     if block.get("type") == "text" and "text" in block:
         return str(block["text"])
@@ -216,7 +216,7 @@ def _format_tool_call_result(result: Any) -> ToolResult:
     返回:
         格式化的 ToolResult 对象
     """
-    # if not isinstance(result, dict):
+    if not isinstance(result, dict):
         return ToolResult(ok=True, output=json.dumps(result, indent=2, ensure_ascii=False))
     parts: list[str] = []
     content = result.get("content")
@@ -240,7 +240,7 @@ def _format_read_resource_result(result: Any) -> ToolResult:
     返回:
         格式化的 ToolResult 对象
     """
-    # if not isinstance(result, dict):
+    if not isinstance(result, dict):
         return ToolResult(ok=False, output=json.dumps(result, indent=2, ensure_ascii=False))
     contents = result.get("contents", [])
     if not contents:
@@ -271,7 +271,7 @@ def _format_prompt_result(result: Any) -> ToolResult:
     返回:
         格式化的 ToolResult 对象
     """
-    # if not isinstance(result, dict):
+    if not isinstance(result, dict):
         return ToolResult(ok=False, output=json.dumps(result, indent=2, ensure_ascii=False))
     header = f"DESCRIPTION: {result['description']}\n\n" if result.get("description") else ""
     body_parts = []
@@ -364,7 +364,7 @@ class StdioMcpClient:
         抛出:
             RuntimeError: 所有协议都尝试失败时抛出
         """
-        # if self._started:
+        if self._started:
             return
         
         if self._start_error is not None and self.process is None:
@@ -401,7 +401,7 @@ class StdioMcpClient:
 
         如果服务器标记为已启动但进程已退出，则先清理再重新启动。
         """
-        # if self._started and not self._is_process_alive():
+        if self._started and not self._is_process_alive():
             self.close()
         if not self._started:
             self.start()
@@ -480,7 +480,7 @@ class StdioMcpClient:
 
     def _ensure_stdout_thread(self) -> None:
         """确保 stdout 读取线程已启动（单例模式）。"""
-        # if self._stdout_thread is not None:
+        if self._stdout_thread is not None:
             return
         self._stdout_thread = threading.Thread(target=self._consume_stdout, daemon=True)
         self._stdout_thread.start()
@@ -605,7 +605,7 @@ class StdioMcpClient:
         抛出:
             RuntimeError: 服务器进程未运行或 stdin 不可用时抛出
         """
-        # if self.process is None or self.process.stdin is None:
+        if self.process is None or self.process.stdin is None:
             raise RuntimeError(f'MCP server "{self.server_name}" is not running.')
         
         payload_bytes = json.dumps(message, ensure_ascii=False).encode("utf-8")
@@ -669,7 +669,7 @@ class StdioMcpClient:
 
     def list_tools(self) -> list[dict[str, Any]]:
         """列出服务器提供的工具（带缓存，懒启动服务器）。"""
-        # if self._tools_cache is not None:
+        if self._tools_cache is not None:
             return self._tools_cache
         self._ensure_started()
         result = self.request("tools/list", {})
@@ -678,7 +678,7 @@ class StdioMcpClient:
 
     def list_resources(self) -> list[dict[str, Any]]:
         """列出服务器提供的资源（带缓存，懒启动服务器）。"""
-        # if self._resources_cache is not None:
+        if self._resources_cache is not None:
             return self._resources_cache
         self._ensure_started()
         result = self.request("resources/list", {}, timeout_seconds=3.0)
@@ -699,7 +699,7 @@ class StdioMcpClient:
 
     def list_prompts(self) -> list[dict[str, Any]]:
         """列出服务器提供的 Prompt（带缓存，懒启动服务器）。"""
-        # if self._prompts_cache is not None:
+        if self._prompts_cache is not None:
             return self._prompts_cache
         self._ensure_started()
         result = self.request("prompts/list", {}, timeout_seconds=3.0)
@@ -742,7 +742,7 @@ class StdioMcpClient:
         2. 跨平台终止子进程（Windows 用 taskkill，Unix 用 SIGTERM/SIGKILL）
         3. 清理所有状态缓存，重置为未启动状态
         """
-        # with self._lock:
+        with self._lock:
             pending = list(self._pending.values())
             self._pending.clear()
             for queue in pending:
@@ -820,7 +820,7 @@ def create_mcp_backed_tools(*, cwd: str, mcp_servers: dict[str, dict[str, Any]])
         包含 tools（ToolDefinition 列表）、servers（状态摘要列表）
         和 dispose（清理函数）的字典
     """
-    # clients: list[StdioMcpClient] = []
+    clients: list[StdioMcpClient] = []
     tools: list[ToolDefinition] = []
     servers: list[dict[str, Any]] = []
     resource_index: dict[str, dict[str, Any]] = {}

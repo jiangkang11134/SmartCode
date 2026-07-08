@@ -41,7 +41,8 @@ def handle_session_listing(cwd: str, list_sessions_only: bool) -> bool:
 
     返回:
         是否执行了会话列表打印操作。
-    """  # if not list_sessions_only:
+    """
+    if not list_sessions_only:
         return False
     sessions = list_sessions()
     print(format_session_list(sessions))
@@ -62,7 +63,8 @@ def load_or_create_session(cwd: str, resume_session: str | None) -> SessionData:
 
     返回:
         加载或创建成功的 SessionData 实例。
-    """  # workspace = str(Path(cwd).resolve())
+    """
+    workspace = str(Path(cwd).resolve())
     if resume_session:
         if resume_session == "latest":
             session = get_latest_session(workspace=workspace)
@@ -121,7 +123,8 @@ def build_tty_runtime_state(
 
     返回:
         (TtyAppArgs, ScreenState) 二元组。
-    """  # args = TtyAppArgs(
+    """
+    args = TtyAppArgs(
         runtime=runtime,
         tools=tools,
         model=model,
@@ -177,7 +180,8 @@ def install_permission_prompt(
     返回:
         (approval_event, approval_result, handler) 三元组，
         分别对应：通知事件、结果字典和处理器函数引用。
-    """  # approval_event = threading.Event()
+    """
+    approval_event = threading.Event()
     approval_result: dict[str, Any] = {}
 
     def _permission_prompt_handler(request: dict[str, Any]) -> dict[str, Any]:
@@ -207,7 +211,8 @@ def refresh_tty_session_snapshot(args: TtyAppArgs, state: ScreenState) -> None:
     参数:
         args: TTY 应用参数，从中读取 messages、permissions、tools 等。
         state: 当前屏幕状态，其 session 将被就地更新。
-    """  # if not state.session:
+    """
+    if not state.session:
         return
 
     state.session.messages = list(args.messages)
@@ -265,7 +270,8 @@ def finalize_tty_session(args: TtyAppArgs, state: ScreenState) -> None:
     参数:
         args: TTY 应用参数。
         state: 当前屏幕状态，包含待保存的 session 和 autosave 对象。
-    """  # if not state.session:
+    """
+    if not state.session:
         return
 
     refresh_tty_session_snapshot(args, state)

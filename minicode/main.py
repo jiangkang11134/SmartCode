@@ -19,7 +19,7 @@ import sys
 import os
 from pathlib import Path
 
-from minicode.agent_loop_lite import run_agent_turn
+from minicode.agent_loop import run_agent_turn
 from minicode.cli_commands import try_handle_local_command
 from minicode.config import load_runtime_config
 from minicode.history import load_history_entries, save_history_entries

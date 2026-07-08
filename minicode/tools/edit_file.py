@@ -30,7 +30,8 @@ def _normalize_line(line: str) -> str:
 
     返回:
         规范化后的文本行。
-    """  # return line.rstrip().replace("\t", "    ")
+    """
+    return line.rstrip().replace("\t", "    ")
 
 
 def _find_exact_match(content: str, search: str, fuzzy: bool = False) -> list[tuple[int, int]]:
@@ -45,7 +46,8 @@ def _find_exact_match(content: str, search: str, fuzzy: bool = False) -> list[tu
 
     返回:
         匹配位置列表，每个元素为 (起始字符偏移, 结束字符偏移) 的元组。
-    """  # if not search:
+    """
+    if not search:
         return []
     
     if not fuzzy:
@@ -91,7 +93,8 @@ def _format_mismatch_diagnostic(content: str, search: str) -> str:
 
     返回:
         格式化后的诊断信息字符串，包含最接近的匹配位置、相似度和行级差异提示。
-    """  # search_lines = search.split("\n")
+    """
+    search_lines = search.split("\n")
     content_lines = content.split("\n")
     
     # Find the best matching region using difflib
@@ -161,7 +164,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果参数类型无效或搜索字符串为空。
-    """  # path = input_data.get("path")
+    """
+    path = input_data.get("path")
     search = input_data.get("search", input_data.get("old"))
     replace = input_data.get("replace", input_data.get("new"))
     replace_all = bool(input_data.get("replaceAll", input_data.get("replace_all", False)))
@@ -202,7 +206,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         ToolResult，成功时包含替换后的文件内容，失败时包含诊断信息。
-    """  # target = resolve_tool_path(context, input_data["path"], "write")
+    """
+    target = resolve_tool_path(context, input_data["path"], "write")
     content = load_existing_file(target)
     
     # Try exact matching first

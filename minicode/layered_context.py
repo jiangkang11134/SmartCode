@@ -58,7 +58,7 @@ class LayerContent:
         返回:
             包含 text、tokens、priority、timestamp、source 的字典
         """
-        # return {"text": self.text, "tokens": self.tokens,
+        return {"text": self.text, "tokens": self.tokens,
                 "priority": self.priority, "timestamp": self.timestamp, "source": self.source}
 
 
@@ -85,22 +85,22 @@ class ContextBudget:
     @property
     def system_limit(self) -> int:
         """System 层 token 上限。"""
-        # return int(self.total_limit * self.system_ratio)
+        return int(self.total_limit * self.system_ratio)
 
     @property
     def project_limit(self) -> int:
         """Project 层 token 上限。"""
-        # return int(self.total_limit * self.project_ratio)
+        return int(self.total_limit * self.project_ratio)
 
     @property
     def session_limit(self) -> int:
         """Session 层 token 上限。"""
-        # return int(self.total_limit * self.session_ratio)
+        return int(self.total_limit * self.session_ratio)
 
     @property
     def scratchpad_limit(self) -> int:
         """Scratchpad 层 token 上限。"""
-        # return int(self.total_limit * self.scratchpad_ratio)
+        return int(self.total_limit * self.scratchpad_ratio)
 
     def get_limit(self, layer: ContextLayer) -> int:
         """获取指定层级的 token 上限。
@@ -111,7 +111,7 @@ class ContextBudget:
         返回:
             该层级的 token 上限（整数）
         """
-        # return {ContextLayer.SYSTEM: self.system_limit,
+        return {ContextLayer.SYSTEM: self.system_limit,
                 ContextLayer.PROJECT: self.project_limit,
                 ContextLayer.SESSION: self.session_limit,
                 ContextLayer.SCRATCHPAD: self.scratchpad_limit}.get(layer, 0)
@@ -136,7 +136,7 @@ class LayeredContext:
         参数:
             budget: 上下文预算配置，默认为 None（使用默认配置）
         """
-        # self.budget = budget or ContextBudget()
+        self.budget = budget or ContextBudget()
         self._layers: dict[ContextLayer, list[LayerContent]] = {
             ContextLayer.SYSTEM: [], ContextLayer.PROJECT: [],
             ContextLayer.SESSION: [], ContextLayer.SCRATCHPAD: [],
@@ -160,7 +160,7 @@ class LayeredContext:
             priority: 优先级（越大越重要）
             source: 来源标识
         """
-        # if tokens is None:
+        if tokens is None:
             tokens = self._estimate_tokens(text)
         content = LayerContent(text=text, tokens=tokens, priority=priority, source=source)
         self._layers[layer].append(content)
@@ -267,7 +267,7 @@ class LayeredContext:
         参数:
             layer: 需要修剪的目标层级
         """
-        # limit = self.budget.get_limit(layer)
+        limit = self.budget.get_limit(layer)
         contents = self._layers[layer]
         if sum(c.tokens for c in contents) <= limit:
             return
@@ -305,7 +305,7 @@ class LayeredContext:
         返回:
             预估 token 数（至少为 1）
         """
-        # cjk = sum(1 for ch in text if '一' <= ch <= '鿿' or '㐀' <= ch <= '䶿')
+        cjk = sum(1 for ch in text if '一' <= ch <= '鿿' or '㐀' <= ch <= '䶿')
         ascii_chars = len(text) - cjk
         return max(1, int(ascii_chars / 4.0 + cjk / 1.5))
 
@@ -348,7 +348,7 @@ class LayeredContext:
         返回:
             完整的字典表示
         """
-        # return {
+        return {
             "budget": {"total_limit": self.budget.total_limit,
                        "system_limit": self.budget.system_limit,
                        "project_limit": self.budget.project_limit,
@@ -377,7 +377,7 @@ class ContextBuilder:
         参数:
             layered_context: 可选的现有 LayeredContext 实例
         """
-        # self.context = layered_context or LayeredContext()
+        self.context = layered_context or LayeredContext()
 
     def set_system_prompt(self, prompt: str, tokens: int | None = None) -> None:
         """设置 System 层的系统提示内容。
@@ -414,7 +414,7 @@ class ContextBuilder:
             content: 消息内容
             tokens: 可选，预估 token 数
         """
-        # text = f"{role}: {content}"
+        text = f"{role}: {content}"
         self.context.add(ContextLayer.SESSION, text, tokens, priority=50, source=f"msg_{role}")
 
     def add_scratchpad(self, content: str, tokens: int | None = None) -> None:

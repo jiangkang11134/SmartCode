@@ -28,7 +28,8 @@ def _format_size(size_bytes: int) -> str:
 
     返回:
         带单位的可读大小字符串。
-    """  # for unit in ['B', 'KB', 'MB', 'GB']:
+    """
+    for unit in ['B', 'KB', 'MB', 'GB']:
         if size_bytes < 1024:
             return f"{size_bytes:.1f}{unit}"
         size_bytes /= 1024
@@ -49,7 +50,8 @@ def _format_time(timestamp: float) -> str:
 
     返回:
         可读的相对时间或日期字符串。
-    """  # dt = datetime.fromtimestamp(timestamp)
+    """
+    dt = datetime.fromtimestamp(timestamp)
     now = time.time()
     diff = now - timestamp
 
@@ -77,7 +79,8 @@ def _get_file_icon(file_path: Path) -> str:
 
     返回:
         表示文件类型的 Emoji 字符串。
-    """  # ext = file_path.suffix.lower()
+    """
+    ext = file_path.suffix.lower()
     icons = {
         '.py': '🐍',
         '.js': '📜',
@@ -122,7 +125,8 @@ def _get_file_status_color(file_path: Path) -> str:
 
     返回:
         表示修改时间新鲜度的 Emoji 字符串。
-    """  # now = time.time()
+    """
+    now = time.time()
     age = now - file_path.stat().st_mtime
 
     if age < 3600:  # Modified within 1 hour
@@ -160,7 +164,8 @@ def _build_tree(
 
     返回:
         树的每一行字符串列表。
-    """  # if ignore_dirs is None:
+    """
+    if ignore_dirs is None:
         ignore_dirs = {'.git', '__pycache__', 'venv', 'env', '.tox', 'node_modules', '.mypy_cache', '.pytest_cache'}
 
     lines = []
@@ -229,7 +234,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 当 max_depth 超出 1-10 范围或 show_hidden 不是布尔值时。
-    """  # path = input_data.get("path", ".")
+    """
+    path = input_data.get("path", ".")
     max_depth = int(input_data.get("max_depth", 3))
     if max_depth < 1 or max_depth > 10:
         raise ValueError("max_depth must be between 1 and 10")
@@ -261,7 +267,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         包含格式化文件树文本的 ToolResult；路径不存在或权限不足时返回错误信息。
-    """  # try:
+    """
+    try:
         target = resolve_tool_path(context, input_data["path"], "list")
     except (PermissionError, RuntimeError) as error:
         return ToolResult(ok=False, output=str(error))

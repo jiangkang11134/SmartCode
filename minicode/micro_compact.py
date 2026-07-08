@@ -125,7 +125,7 @@ class MicroCompactor:
         返回:
             (压缩后的消息列表, MicroCompactionStats 统计信息)。
         """
-        # if not messages:
+        if not messages:
             return messages, MicroCompactionStats()
 
         now = current_time or time.time()
@@ -268,7 +268,7 @@ class MicroCompactor:
         返回:
             修剪后的消息列表，若无需修剪则返回 None。
         """
-        # assistant_indices = [
+        assistant_indices = [
             i for i, m in enumerate(messages)
             if m.get("role") == "assistant"
         ]

@@ -27,7 +27,7 @@ def build_unified_diff(file_path: str, before: str, after: str) -> str:
     返回:
         格式化的 diff 字符串，或无变更提示
     """
-    # if before == after:
+    if before == after:
         return f"(no changes for {file_path})"
     diff = difflib.unified_diff(
         before.splitlines(),
@@ -51,7 +51,7 @@ def load_existing_file(target_path: str | Path) -> str:
     返回:
         文件内容字符串；若文件不存在则返回空字符串
     """
-    # file_path = Path(target_path)
+    file_path = Path(target_path)
     if not file_path.exists():
         return ""
     return file_path.read_text(encoding="utf-8")
@@ -82,7 +82,7 @@ def apply_reviewed_file_change(
     返回:
         包含操作结果的 ToolResult 对象
     """
-    # target = Path(target_path)
+    target = Path(target_path)
     previous_content = load_existing_file(target)
     if previous_content == next_content:
         return ToolResult(ok=True, output=f"No changes needed for {file_path}")

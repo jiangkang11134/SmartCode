@@ -61,7 +61,7 @@ class StructuredFormatter(logging.Formatter):
         返回:
             JSON 格式的日志行字符串
         """
-        # entry = {
+        entry = {
             "ts": datetime.fromtimestamp(record.created, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
             "level": record.levelname,
             "module": record.name,
@@ -163,7 +163,7 @@ def get_logger(name: str) -> logging.Logger:
     Returns:
         配置好的子 logger
     """
-    # return logging.getLogger(f"minicode.{name}")
+    return logging.getLogger(f"minicode.{name}")
 
 
 def structured_logging_requested(cli_flag: bool = False) -> bool:
@@ -173,7 +173,7 @@ def structured_logging_requested(cli_flag: bool = False) -> bool:
     ``MINI_CODE_LOG_STRUCTURED`` 取真值（``1``/``true``/``yes``/``on``）。
     统一在入口处调用，避免各模块各自判断。
     """
-    # if cli_flag:
+    if cli_flag:
         return True
     return os.getenv("MINI_CODE_LOG_STRUCTURED", "").strip().lower() in (
         "1",
@@ -200,7 +200,7 @@ def log_api_call(model: str, tokens_in: int, tokens_out: int, cost: float, durat
         cost: 本次调用费用（美元）
         duration_ms: 调用耗时（毫秒）
     """
-    # logger = get_logger("api")
+    logger = get_logger("api")
     logger.info(
         "API call: model=%s, tokens_in=%d, tokens_out=%d, cost=$%.4f, duration=%dms",
         model, tokens_in, tokens_out, cost, duration_ms,
@@ -226,7 +226,7 @@ def log_tool_execution(tool_name: str, success: bool, duration_ms: float, error:
         duration_ms: 执行耗时（毫秒）
         error: 可选，失败时的错误信息
     """
-    # logger = get_logger("tools")
+    logger = get_logger("tools")
     extra = {"tool_name": tool_name, "duration_ms": duration_ms}
     if success:
         logger.debug("Tool %s executed successfully in %dms", tool_name, duration_ms, extra=extra)
@@ -246,7 +246,7 @@ def log_permission_check(kind: str, target: str, granted: bool) -> None:
         target: 权限目标（如文件路径、命令字符串）
         granted: 是否授权
     """
-    # logger = get_logger("permissions")
+    logger = get_logger("permissions")
     extra = {"tool_name": kind}
     if granted:
         logger.debug("Permission granted: %s for %s", kind, target, extra=extra)
@@ -264,7 +264,7 @@ def log_session_event(event: str, details: str = "") -> None:
         event: 事件名称（如 "start"、"save"、"restore"）
         details: 可选的事件详情
     """
-    # logger = get_logger("session")
+    logger = get_logger("session")
     if details:
         logger.info("Session %s: %s", event, details)
     else:
@@ -280,17 +280,17 @@ def get_log_stats() -> dict[str, Any]:
     返回:
         包含日志文件统计信息的字典
     """
-    # stats: dict[str, Any] = {
-        "log_file": str(LOG_FILE),
+    stats: dict[str, Any] = {
+    "log_file": str(LOG_FILE),
         "exists": LOG_FILE.exists(),
     }
 
     if LOG_FILE.exists():
         size = LOG_FILE.stat().st_size
-        stats["size_bytes"] = size
-        stats["size_mb"] = round(size / (1024 * 1024), 2)
-        stats["max_size_mb"] = LOG_MAX_BYTES / (1024 * 1024)
-        stats["rotation_pct"] = round(size / LOG_MAX_BYTES * 100, 1)
+    stats["size_bytes"] = size
+    stats["size_mb"] = round(size / (1024 * 1024), 2)
+    stats["max_size_mb"] = LOG_MAX_BYTES / (1024 * 1024)
+    stats["rotation_pct"] = round(size / LOG_MAX_BYTES * 100, 1)
 
     # Count rotated files
     rotated = list(LOG_FILE.parent.glob(f"{LOG_FILE.name}.*"))

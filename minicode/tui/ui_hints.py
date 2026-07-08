@@ -23,7 +23,8 @@ def _get_contextual_help(state: ScreenState, args: TtyAppArgs) -> str | None:
 
     返回:
         str | None: 提示文本，无合适提示时返回 None
-    """  # if not state.is_busy and not state.pending_approval:
+    """
+    if not state.is_busy and not state.pending_approval:
         tips = [
             "💡 Tip: Use /skills to see available workflows",
             "💡 Tip: Try '帮我分析这个项目' to get started",

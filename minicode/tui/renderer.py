@@ -56,7 +56,8 @@ def _render_header_panel(args: TtyAppArgs, state: ScreenState) -> str:
 
     返回:
         渲染后的顶部面板字符串。
-    """  # stats = _get_session_stats(args, state)
+    """
+    stats = _get_session_stats(args, state)
     cache_key = (
         args.cwd,
         id(args.runtime),
@@ -101,7 +102,8 @@ def _render_footer_cached(
 
     返回:
         渲染后的底部状态栏字符串。
-    """  # cache_key = (
+    """
+    cache_key = (
         status,
         tools_enabled,
         skills_enabled,
@@ -126,7 +128,8 @@ def _render_prompt_panel(state: ScreenState) -> str:
 
     返回:
         渲染后的输入提示面板字符串。
-    """  # commands = _get_visible_commands(state.input)
+    """
+    commands = _get_visible_commands(state.input)
     prompt_body = render_input_prompt(state.input, state.cursor_offset)
     if commands:
         prompt_body += "\n" + render_slash_menu(
@@ -179,7 +182,8 @@ def _get_transcript_snapshot(state: ScreenState) -> list[TranscriptEntry]:
 
     返回:
         会话记录条目的快照列表。
-    """  # cache_key = (id(state.transcript), state.transcript_revision, len(state.transcript))
+    """
+    cache_key = (id(state.transcript), state.transcript_revision, len(state.transcript))
     cached = _transcript_snapshot_cache.get("key")
     if cached and cached[0] == cache_key:
         return cached[1]
@@ -206,7 +210,8 @@ def _decorate_session_feed_body(
 
     返回:
         装饰后的会话记录正文字符串，若无需添加则返回原始正文。
-    """  # checkpoint_summary_line = format_checkpoint_summary_line(session)
+    """
+    checkpoint_summary_line = format_checkpoint_summary_line(session)
     runtime_summary_line = format_runtime_summary_line(transcript_entries)
     session_metadata = getattr(session, "metadata", None)
     summary_lines = [

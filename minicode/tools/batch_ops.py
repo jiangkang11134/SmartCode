@@ -29,7 +29,8 @@ def _validate_batch_copy(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 source 或 destination 缺失或为空。
-    """  # source = input_data.get("source", "")
+    """
+    source = input_data.get("source", "")
     destination = input_data.get("destination", "")
     if not isinstance(source, str) or not source.strip():
         raise ValueError("source is required")
@@ -51,7 +52,8 @@ def _run_batch_copy(input_data: dict, context: ToolContext) -> ToolResult:
 
     返回:
         ToolResult: 复制成功时 ok=True，失败时 ok=False 并附带错误信息。
-    """  # try:
+    """
+    try:
         source = resolve_tool_path(context, input_data["source"], "read")
         destination = resolve_tool_path(context, input_data["destination"], "write")
     except (PermissionError, RuntimeError) as error:
@@ -104,7 +106,8 @@ def _validate_batch_move(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 source 或 destination 缺失或为空。
-    """  # source = input_data.get("source", "")
+    """
+    source = input_data.get("source", "")
     destination = input_data.get("destination", "")
     if not isinstance(source, str) or not source.strip():
         raise ValueError("source is required")
@@ -125,7 +128,8 @@ def _run_batch_move(input_data: dict, context: ToolContext) -> ToolResult:
 
     返回:
         ToolResult: 移动成功时 ok=True，失败时 ok=False 并附带错误信息。
-    """  # try:
+    """
+    try:
         source = resolve_tool_path(context, input_data["source"], "read")
         destination = resolve_tool_path(context, input_data["destination"], "write")
     except (PermissionError, RuntimeError) as error:
@@ -172,7 +176,8 @@ def _validate_batch_delete(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果 path 缺失或为空。
-    """  # path = input_data.get("path", "")
+    """
+    path = input_data.get("path", "")
     if not isinstance(path, str) or not path.strip():
         raise ValueError("path is required")
     return {"path": path.strip(), "recursive": input_data.get("recursive", False)}
@@ -190,7 +195,8 @@ def _run_batch_delete(input_data: dict, context: ToolContext) -> ToolResult:
 
     返回:
         ToolResult: 删除成功时 ok=True，失败时 ok=False 并附带错误信息。
-    """  # try:
+    """
+    try:
         target = resolve_tool_path(context, input_data["path"], "delete")
     except (PermissionError, RuntimeError) as error:
         return ToolResult(ok=False, output=str(error))

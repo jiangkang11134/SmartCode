@@ -23,7 +23,8 @@ def _get_session_stats(args: Any, state: Any) -> dict[str, int]:
 
     返回:
         dict[str, int]: 包含 transcriptCount、messageCount、skillCount、mcpCount 的字典
-    """  # return {
+    """
+    return {
         "transcriptCount": len(state.transcript),
         "messageCount": len(args.messages),
         "skillCount": len(args.tools.get_skills()),
@@ -42,7 +43,8 @@ def _truncate_for_display(text: str, max_len: int = 180) -> str:
 
     返回:
         str: 截断后的文本
-    """  # return text[:max_len] + "..." if len(text) > max_len else text
+    """
+    return text[:max_len] + "..." if len(text) > max_len else text
 
 
 def _summarize_collapsed_tool_body(output: str) -> str:
@@ -77,7 +79,8 @@ def _summarize_tool_input(tool_name: str, tool_input: Any) -> str:
 
     返回:
         str: 工具输入的可读摘要
-    """  # if isinstance(tool_input, str):
+    """
+    if isinstance(tool_input, str):
         return _truncate_for_display(" ".join(tool_input.split()).strip())
 
     if isinstance(tool_input, dict):
@@ -117,7 +120,8 @@ def _is_file_edit_tool(tool_name: str) -> bool:
 
     返回:
         bool: 如果是 edit_file、patch_file、modify_file 或 write_file 则返回 True
-    """  # return tool_name in ("edit_file", "patch_file", "modify_file", "write_file")
+    """
+    return tool_name in ("edit_file", "patch_file", "modify_file", "write_file")
 
 
 def _extract_path_from_tool_input(tool_input: Any) -> str | None:
@@ -128,7 +132,8 @@ def _extract_path_from_tool_input(tool_input: Any) -> str | None:
 
     返回:
         str | None: 如果存在有效的 path 字段则返回该路径，否则返回 None
-    """  # if not isinstance(tool_input, dict):
+    """
+    if not isinstance(tool_input, dict):
         return None
     value = tool_input.get("path")
     return value if isinstance(value, str) and value.strip() else None
@@ -173,7 +178,8 @@ def _mark_unfinished_tools(state_obj: Any) -> int:
 
     返回:
         int: 被标记为错误的工具条目数量
-    """  # count = 0
+    """
+    count = 0
     for entry in state_obj.transcript:
         if entry.kind == "tool" and entry.status == "running":
             entry.status = "error"

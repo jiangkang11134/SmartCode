@@ -33,7 +33,8 @@ def _command_output_encoding() -> str:
 
     返回:
         编码格式字符串。
-    """  # return os.environ.get("MINICODE_COMMAND_ENCODING", "utf-8").strip() or "utf-8"
+    """
+    return os.environ.get("MINICODE_COMMAND_ENCODING", "utf-8").strip() or "utf-8"
 
 
 def _decode_command_output(data: bytes | str | None) -> str:
@@ -47,7 +48,8 @@ def _decode_command_output(data: bytes | str | None) -> str:
 
     返回:
         解码后的字符串，如果输入为 None 则返回空字符串。
-    """  # if not data:
+    """
+    if not data:
         return ""
     if isinstance(data, str):
         return data
@@ -70,7 +72,8 @@ def _truncate_large_output(output: str, max_chars: int = MAX_OUTPUT_CHARS) -> st
 
     返回:
         截断后的输出字符串；如果未超过阈值则返回原始内容。
-    """  # if len(output) <= max_chars:
+    """
+    if len(output) <= max_chars:
         return output
     
     lines = output.split("\n")
@@ -167,7 +170,8 @@ def _is_allowed_command(command: str) -> bool:
 
     返回:
         如果命令在只读命令或开发命令集合中，返回 True。
-    """  # cmd = command.lower() if os.name == "nt" else command
+    """
+    cmd = command.lower() if os.name == "nt" else command
     return cmd in READONLY_COMMANDS or cmd in DEVELOPMENT_COMMANDS
 
 
@@ -181,7 +185,8 @@ def _is_read_only_command(command: str) -> bool:
 
     返回:
         如果命令在只读命令集合中，返回 True。
-    """  # cmd = command.lower() if os.name == "nt" else command
+    """
+    cmd = command.lower() if os.name == "nt" else command
     return cmd in READONLY_COMMANDS
 
 
@@ -197,7 +202,8 @@ def _looks_like_shell_snippet(command: str, args: list[str]) -> bool:
 
     返回:
         如果是 shell 片段则返回 True。
-    """  # return not args and any(char in command for char in "|&;<>()$`")
+    """
+    return not args and any(char in command for char in "|&;<>()$`")
 
 
 def _is_background_shell_snippet(command: str, args: list[str]) -> bool:
@@ -211,7 +217,8 @@ def _is_background_shell_snippet(command: str, args: list[str]) -> bool:
 
     返回:
         如果是后台 shell 片段则返回 True。
-    """  # trimmed = command.strip()
+    """
+    trimmed = command.strip()
     return not args and trimmed.endswith("&") and not trimmed.endswith("&&")
 
 
@@ -225,7 +232,8 @@ def _strip_trailing_background_operator(command: str) -> str:
 
     返回:
         移除了尾部 & 操作符后的命令字符串。
-    """  # return command.strip().removesuffix("&").strip()
+    """
+    return command.strip().removesuffix("&").strip()
 
 
 def _classify_shell_snippet_risk(command: str) -> str | None:
@@ -239,7 +247,8 @@ def _classify_shell_snippet_risk(command: str) -> str | None:
 
     返回:
         如果检测到风险操作，返回描述风险原因的字符串；否则返回 None。
-    """  # lowered = command.lower()
+    """
+    lowered = command.lower()
     collapsed = re.sub(r"\s+", " ", lowered).strip()
     if re.search(r"\brm\s+-[a-z]*r[a-z]*f\b|\brm\s+-[a-z]*f[a-z]*r\b", collapsed):
         return f"shell snippet contains rm -rf payload: {command}"
@@ -268,7 +277,8 @@ def _normalize_command_input(input_data: dict) -> tuple[str, list[str]]:
 
     返回:
         (命令名称, 参数列表) 的元组。
-    """  # command = str(input_data.get("command", "")).strip()
+    """
+    command = str(input_data.get("command", "")).strip()
     raw_args = input_data.get("args") or []
     if raw_args:
         return command, [str(arg) for arg in raw_args]
@@ -287,7 +297,8 @@ def _is_windows_shell_builtin(command: str) -> bool:
 
     返回:
         如果当前为 Windows 平台且命令为内置命令，返回 True。
-    """  # return os.name == "nt" and command.lower() in {
+    """
+    return os.name == "nt" and command.lower() in {
         "cd",
         "chdir",
         "cls",
@@ -334,7 +345,8 @@ def _build_execution_command(
 
     返回:
         (可执行文件路径, 参数列表) 的元组。
-    """  # if use_shell:
+    """
+    if use_shell:
         shell_command = _strip_trailing_background_operator(raw_command) if background_shell else raw_command
         if os.name == "nt":
             return "cmd", ["/d", "/s", "/c", shell_command]
@@ -363,7 +375,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 如果参数类型无效。
-    """  # command = input_data.get("command")
+    """
+    command = input_data.get("command")
     if not isinstance(command, str):
         raise ValueError("command is required")
     args = input_data.get("args") or []
@@ -397,7 +410,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         ToolResult，包含命令执行结果和输出内容。
-    """  # effective_cwd = str(resolve_tool_path(context, input_data["cwd"], "list")) if input_data.get("cwd") else context.cwd
+    """
+    effective_cwd = str(resolve_tool_path(context, input_data["cwd"], "list")) if input_data.get("cwd") else context.cwd
     normalized_command, normalized_args = _normalize_command_input(input_data)
     if not normalized_command:
         return ToolResult(ok=False, output="Command not allowed: empty command")

@@ -148,7 +148,7 @@ class ParsedIntent:
         返回:
             包含所有字段的字典
         """
-        # return {
+        return {
             "raw_input": self.raw_input,
             "intent_type": self.intent_type.value,
             "action_type": self.action_type.value,
@@ -167,7 +167,7 @@ class ParsedIntent:
         返回:
             True 如果意图类型属于代码相关范畴
         """
-        # return self.intent_type in {
+        return self.intent_type in {
             IntentType.CODE, IntentType.DEBUG, IntentType.REFACTOR,
             IntentType.REVIEW, IntentType.TEST,
         }
@@ -180,7 +180,7 @@ class ParsedIntent:
         返回:
             True 如果动作类型不会修改任何资源
         """
-        # return self.action_type in {ActionType.READ, ActionType.ANALYZE}
+        return self.action_type in {ActionType.READ, ActionType.ANALYZE}
 
 
 class IntentParser:
@@ -194,7 +194,7 @@ class IntentParser:
 
     def __init__(self):
         """初始化解析器，预编译所有正则模式。"""
-        # self._pattern_cache: list[tuple[re.Pattern, IntentType, ActionType]] = []
+        self._pattern_cache: list[tuple[re.Pattern, IntentType, ActionType]] = []
         self._compile_patterns()
 
     def _compile_patterns(self) -> None:
@@ -202,7 +202,7 @@ class IntentParser:
 
         编译失败的正则会记录警告并跳过，不影响其他模式的加载。
         """
-        # for pattern, intent, action in _ALL_PATTERNS:
+        for pattern, intent, action in _ALL_PATTERNS:
             try:
                 self._pattern_cache.append((re.compile(pattern, re.IGNORECASE), intent, action))
             except re.error:
@@ -225,7 +225,7 @@ class IntentParser:
         返回:
             解析后的 ParsedIntent 对象
         """
-        # if not user_input or not user_input.strip():
+        if not user_input or not user_input.strip():
             return ParsedIntent(
                 raw_input=user_input,
                 intent_type=IntentType.UNKNOWN,
@@ -262,7 +262,7 @@ class IntentParser:
         返回:
             (意图类型, 动作类型, 置信度分数) 三元组
         """
-        # best_intent = IntentType.UNKNOWN
+        best_intent = IntentType.UNKNOWN
         best_action = ActionType.UNKNOWN
         best_score = 0.0
 
@@ -292,7 +292,7 @@ class IntentParser:
         返回:
             包含 files/functions/classes/languages 四个键的字典
         """
-        # entities: dict[str, list[str]] = {"files": [], "functions": [], "classes": [], "languages": []}
+        entities: dict[str, list[str]] = {"files": [], "functions": [], "classes": [], "languages": []}
 
         file_pattern = re.compile(r"\b([\w/\\._-]+\.(?:py|js|ts|jsx|tsx|java|go|rs|cpp|c|h|md|json|yaml|yml|toml))\b", re.I)
         for m in file_pattern.finditer(text):
@@ -329,7 +329,7 @@ class IntentParser:
         返回:
             去重后的关键词列表（最多 20 个）
         """
-        # stopwords = {"the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+        stopwords = {"the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
                      "have", "has", "had", "do", "does", "did", "will", "would", "could",
                      "should", "may", "might", "must", "can", "need", "to", "of", "in",
                      "for", "on", "with", "at", "by", "from", "as", "into", "through",
@@ -368,7 +368,7 @@ class IntentParser:
         返回:
             "simple" / "moderate" / "complex" 三档之一
         """
-        # length_score = min(len(text) / 200, 1.0)
+        length_score = min(len(text) / 200, 1.0)
         intent_scores = {
             IntentType.CODE: 0.6, IntentType.DEBUG: 0.5, IntentType.REFACTOR: 0.7,
             IntentType.EXPLAIN: 0.3, IntentType.SEARCH: 0.2, IntentType.REVIEW: 0.4,
@@ -403,7 +403,7 @@ class IntentParser:
         返回:
             调整后的置信度（上限 1.0）
         """
-        # confidence = base
+        confidence = base
         if any(entities.values()):
             confidence += 0.1
         if 3 <= len(keywords) <= 15:
@@ -423,7 +423,7 @@ def get_intent_parser() -> IntentParser:
     返回:
         IntentParser 单例
     """
-    # global _parser
+    global _parser
     if _parser is None:
         _parser = IntentParser()
     return _parser
@@ -440,4 +440,4 @@ def parse_intent(user_input: str) -> ParsedIntent:
     返回:
         解析后的 ParsedIntent 对象
     """
-    # return get_intent_parser().parse(user_input)
+    return get_intent_parser().parse(user_input)

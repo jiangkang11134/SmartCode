@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# MiniCode runtime data
+.mini-code-import-map/
+.mini-code-tool-results/
+benchmark/results*/
+benchmark/e2e_output.log
+benchmark/e2e_*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local settings (API keys)
+minicode/settings.local.json

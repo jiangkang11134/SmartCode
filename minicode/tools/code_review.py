@@ -346,3 +346,6 @@ code_review_tool = ToolDefinition(
     validator=_validate,
     run=_run,
 )
+
+# ── 审查系统 re-export ──
+from minicode.review.hooks import _pre_review_content  # noqa: F401

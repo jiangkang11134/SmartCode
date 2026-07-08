@@ -26,7 +26,7 @@ def load_history_entries() -> list[str]:
     返回:
         历史记录字符串列表，按文件中存储的顺序
     """
-    # global _history_cache
+    global _history_cache
     now = time.time()
     if _history_cache is not None:
         cached_at, cached_entries = _history_cache
@@ -56,7 +56,7 @@ def save_history_entries(entries: list[str]) -> None:
     参数:
         entries: 要保存的历史记录字符串列表（仅保留前 200 条）
     """
-    # global _history_cache
+    global _history_cache
     MINI_CODE_DIR.mkdir(parents=True, exist_ok=True)
     MINI_CODE_HISTORY_PATH.write_text(
         json.dumps({"entries": entries[-200:]}, indent=2) + "\n",

@@ -53,7 +53,7 @@ def _require_input(prompt: str, default: str | None = None) -> str:
     返回:
         非空用户输入或默认值
     """
-    # while True:
+    while True:
         value = _read_input(prompt, default)
         if value:
             return value
@@ -71,7 +71,7 @@ def _mask_secret(secret: str | None) -> str:
     返回:
         "[saved]"（已设置）或 "[not set]"（未设置）
     """
-    # if not secret:
+    if not secret:
         return "[not set]"
     return "[saved]"
 

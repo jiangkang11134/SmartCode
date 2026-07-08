@@ -91,7 +91,8 @@ def _is_multiline_paste_chunk(chunk: str) -> bool:
 
     返回:
         是否为多行粘贴内容
-    """  # has_newline = False
+    """
+    has_newline = False
     has_other = False
     for c in chunk:
         if c == '\r' or c == '\n':
@@ -114,7 +115,8 @@ def maybe_need_more_for_escape_sequence(chunk: str) -> bool:
 
     返回:
         是否需要更多输入才能完成转义序列解析
-    """  # if not chunk:
+    """
+    if not chunk:
         return False
     if chunk[0] != '\x1b':
         return False
@@ -167,7 +169,8 @@ def parse_escape_sequence(chunk: str) -> tuple[ParsedInputEvent | None, int]:
 
     返回:
         ``(event, consumed)`` 二元组：解析后的事件和已消耗的字符数
-    """  # if not chunk or chunk[0] != '\x1b':
+    """
+    if not chunk or chunk[0] != '\x1b':
         return None, 0
         
     if len(chunk) == 1:
@@ -270,7 +273,8 @@ def parse_input_chunk(chunk: str, incoming_chunk: str | None = None) -> ParseRes
 
     返回:
         包含事件列表和未解析剩余文本的 ``ParseResult``
-    """  # treat_newlines_as_text = _is_multiline_paste_chunk(
+    """
+    treat_newlines_as_text = _is_multiline_paste_chunk(
         incoming_chunk if incoming_chunk is not None else chunk
     )
     events: list[ParsedInputEvent] = []

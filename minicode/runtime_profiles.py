@@ -37,7 +37,7 @@ class RuntimeProfile:
 _PROFILES: dict[str, RuntimeProfile] = {
     "single": RuntimeProfile(
         name="single",
-        max_steps=50,
+        max_steps=10,
         empty_response_retry_limit=2,
         recoverable_thinking_retry_limit=3,
         working_memory_ttl_seconds=1800,

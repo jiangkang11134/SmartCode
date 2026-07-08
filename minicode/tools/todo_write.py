@@ -27,7 +27,8 @@ def _validate(input_data: dict) -> dict:
 
     抛出:
         ValueError: 当格式不符合要求时。
-    """  # todos = input_data.get("todos")
+    """
+    todos = input_data.get("todos")
     if not isinstance(todos, list):
         raise ValueError("todos must be a list")
     for i, todo in enumerate(todos):
@@ -53,7 +54,8 @@ def _run(input_data: dict, context) -> ToolResult:
 
     返回:
         ToolResult: 格式化后的任务列表文本，包含状态图标、任务 ID、内容和统计信息。
-    """  # global _tasks, _task_id_counter
+    """
+    global _tasks, _task_id_counter
 
     todos = input_data["todos"]
 
