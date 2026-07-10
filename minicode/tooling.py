@@ -355,6 +355,7 @@ class ToolDefinition:
     validator: Validator
     run: Runner
     metadata: ToolMetadata | None = None
+    needs_review: bool = False       # 是否需要在写前触发审查（write/edit/patch 类工具）
 
     @property
     def is_read_only(self) -> bool:

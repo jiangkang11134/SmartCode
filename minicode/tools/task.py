@@ -155,36 +155,27 @@ def _run(input_data: dict, context) -> ToolResult:
     agent_def = AGENT_TYPES[agent_type]
     task_prompt = input_data["prompt"]
 
-    # ── 子 Agent 独立 API 配置 ──
-    # 如果 task_input 带了 sub_api_key/sub_api_base，临时覆写环境变量
-    # 让子 Agent 用不同的 provider（如审查用 DeepSeek，主 Agent 用中转站）
-    _restore_env = {}
-    if "sub_api_key" in input_data:
-        _restore_env["CUSTOM_API_KEY"] = os.environ.get("CUSTOM_API_KEY", "")
-        os.environ["CUSTOM_API_KEY"] = input_data["sub_api_key"]
-    if "sub_api_base" in input_data:
-        _restore_env["CUSTOM_API_BASE_URL"] = os.environ.get("CUSTOM_API_BASE_URL", "")
-        os.environ["CUSTOM_API_BASE_URL"] = input_data["sub_api_base"]
-    if "model" in input_data:
-        _restore_env["ANTHROPIC_MODEL"] = os.environ.get("ANTHROPIC_MODEL", "")
-        os.environ["ANTHROPIC_MODEL"] = input_data["model"]
-
-    # Try to get the model from context or fall back to creating one
-    # The context object carries runtime info needed for the model adapter
+    # 尝试从 ToolContext 获取 runtime
     runtime = None
-    model = None
-
-    # Attempt to extract runtime from the ToolContext
     if hasattr(context, '_runtime') and context._runtime:
-        runtime = context._runtime
+        runtime = dict(context._runtime)  # 浅拷贝，避免修改原始对象
 
     if not runtime:
-        # Try loading from config
         try:
             from minicode.config import load_runtime_config
             runtime = load_runtime_config(context.cwd)
         except Exception:
             pass
+
+    # ── 子 Agent 独立 API 配置 ──
+    # 通过 runtime 传参，不用 os.environ（线程安全）
+    if "sub_api_key" in input_data:
+        runtime["CUSTOM_API_KEY"] = input_data["sub_api_key"]
+    if "sub_api_base" in input_data:
+        runtime["CUSTOM_API_BASE_URL"] = input_data["sub_api_base"]
+    if "model" in input_data:
+        runtime["model"] = input_data["model"]
+        runtime["ANTHROPIC_MODEL"] = input_data["model"]
 
     if not runtime:
         return ToolResult(
@@ -239,24 +230,19 @@ def _run(input_data: dict, context) -> ToolResult:
     max_turns = agent_def["max_turns"]
 
     try:
-        try:
-            result_messages = run_agent_turn(
-                model=model,
-                tools=tools,
-                messages=sub_messages,
-                cwd=context.cwd,
-                permissions=sub_permissions,
-                max_steps=max_turns,
-            )
-        except Exception as e:
-            return ToolResult(
-                ok=False,
-                output=f"Sub-agent ({agent_def['name']}) failed: {type(e).__name__}: {e}"
-            )
-    finally:
-        # 恢复子 Agent 覆写的环境变量
-        for k, v in _restore_env.items():
-            os.environ[k] = v
+        result_messages = run_agent_turn(
+            model=model,
+            tools=tools,
+            messages=sub_messages,
+            cwd=context.cwd,
+            permissions=sub_permissions,
+            max_steps=max_turns,
+        )
+    except Exception as e:
+        return ToolResult(
+            ok=False,
+            output=f"Sub-agent ({agent_def['name']}) failed: {type(e).__name__}: {e}"
+        )
 
     elapsed = time.time() - start_time
 

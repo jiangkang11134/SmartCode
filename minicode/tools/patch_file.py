@@ -117,4 +117,5 @@ patch_file_tool = ToolDefinition(
     },
     validator=_validate,
     run=_run,
+    needs_review=True,
 )  #

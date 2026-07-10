@@ -125,9 +125,10 @@ def _execute_single_tool(
     tool_input = call["input"]
 
     # ════════════════════════════════════════════════════════════════
-    # 钩子 1：写前宽松审查（仅写入类工具）
+    # 钩子 1：写前宽松审查（仅 needs_review=True 的工具）
     # ════════════════════════════════════════════════════════════════
-    if _review_hooks and tool_name in ("write_file", "edit_file", "patch_file"):
+    tool_def = tools.find(tool_name)
+    if _review_hooks and tool_def and tool_def.needs_review:
         result = _review_hooks.on_before_write(tool_name, tool_input)
         if result:
             return result
@@ -170,10 +171,8 @@ def _execute_single_tool(
 
         # ════════════════════════════════════════════════════════════════
         # 钩子 2：写后处理（更新 import map + 严格审查触发）
-        # 审查触发条件（安全路径 / diff特征 / 历史问题率 / 新人代码）
-        # 的判断在 review/hooks.py on_file_written() 中。
         # ════════════════════════════════════════════════════════════════
-        if _review_hooks and result.ok and tool_name in ("write_file", "edit_file", "patch_file"):
+        if _review_hooks and result.ok and tool_def and tool_def.needs_review:
             fp = tool_input.get("file_path") or tool_input.get("path") or ""
             if fp:
                 _review_hooks.on_file_written(fp)
