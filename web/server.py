@@ -118,15 +118,22 @@ async def websocket_chat(websocket: WebSocket):
         user_input = payload.get("message", "")
         mode = payload.get("mode", "off")
         model_name = payload.get("model", os.environ.get("ANTHROPIC_MODEL", "deepseek-v4-flash"))
+        api_key = payload.get("api_key", "")
+        base_url = payload.get("base_url", "")
 
         if not user_input.strip():
             await websocket.send_json({"type": "error", "content": "消息不能为空"})
             await websocket.close()
             return
 
-        # 设置环境
+        # 从前端传入的配置覆写环境变量
         os.environ["MINICODE_REVIEW_MODE"] = mode
         os.environ["MINI_CODE_SHOW_GUIDE"] = "0"
+        if api_key:
+            os.environ["CUSTOM_API_KEY"] = api_key
+        if base_url:
+            os.environ["CUSTOM_API_BASE_URL"] = base_url
+        os.environ["ANTHROPIC_MODEL"] = model_name
 
         # 构建消息
         await websocket.send_json({"type": "status", "content": "正在初始化模型..."})
