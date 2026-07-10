@@ -16,8 +16,9 @@ import logging.handlers
 import os
 import sys
 from datetime import datetime, timezone
-UTC = timezone.utc
 from typing import Any
+
+UTC = timezone.utc
 
 from minicode.config import MINI_CODE_DIR
 

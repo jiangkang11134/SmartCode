@@ -17,8 +17,9 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-UTC = timezone.utc
 from pathlib import Path
+
+UTC = timezone.utc
 from typing import Any
 
 from minicode.config import MINI_CODE_DIR
